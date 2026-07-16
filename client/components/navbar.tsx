@@ -10,7 +10,7 @@ interface NavLink {
 const links: NavLink[] = [
   { label: "Pizza", path: "/pizza", icon: "ti-pizza" },
   { label: "Drinks", path: "/drinks", icon: "ti-bottle" },
-  { label: "Home", path: "/home", icon: "ti-home-2" },
+  { label: "Home", path: "/", icon: "ti-home-2" },
   { label: "Cart", path: "/cart", icon: "ti-shopping-cart" },
   { label: "Account", path: "/account", icon: "ti-user-circle" },
 ]

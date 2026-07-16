@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { toast } from "react-toastify"
 import { motion } from "framer-motion"
 import { useContext } from "react"
 // import { CartContext } from '@/context/cartContext'
@@ -43,7 +44,6 @@ const PizzaSection = () => {
 
   const handleAdd = (p: any) => {
     // addToCart(p)
-    setToast(true)
     setTimeout(() => setToast(false), 2000)
   }
 
@@ -68,7 +68,7 @@ const PizzaSection = () => {
       {/* availabel dishes and items  */}
 
       <div className="flex items-center gap-3 mb-6">
-        <button className="bg-amber-700 p-3 rounded-2xl text-2xl font-bold" onClick={() => navi.push('/home')}>← Back</button>
+        <button className="bg-amber-700 p-3 rounded-2xl text-2xl font-bold" onClick={() => navi.push('/')}>← Back</button>
         <div>
           <h1 className="text-[clamp(1.4rem,3vw,2rem)] text-(--cream) font-bold">
             Our <span className="text-(--orange)">Pizzas</span>
@@ -77,12 +77,6 @@ const PizzaSection = () => {
         </div>
       </div>
       {toast && (
-        // FIX: `w-50` isn't a real Tailwind class (no `50` step exists in the
-        // default width scale), and the element was `fixed` with only
-        // `right-10` and no `top-*`, so it had no defined vertical position
-        // and would render wherever it landed in normal page flow instead of
-        // floating in a fixed spot. Added `top-6`, a real width, and text
-        // styling for contrast against the green background.
         <div className="fixed top-6 right-6 z-30 w-56 flex items-center justify-center gap-2 rounded-2xl border-2 border-green-800 bg-green-700 p-3 shadow-lg">
           <p className="text-white font-medium">Added to cart!</p>
         </div>
@@ -108,7 +102,7 @@ const PizzaSection = () => {
               <div className="flex justify-between items-center">
                 <span className="text-(--orange) font-bold text-[0.95rem]">₹{p.price}</span>
                 <button
-                  className="bg-(--orange) text-white border-none rounded-lg px-3.5 py-1.5 text-[0.78rem] font-semibold"
+                  className="bg-amber-700 text-white border-none rounded-lg px-3.5 py-1.5 text-[0.78rem] font-semibold"
                   onClick={() => handleAdd(p)}
                 >+ Add</button>
               </div>
