@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { FaCartPlus } from "react-icons/fa6"
 import { toast } from "react-toastify"
 import { motion } from "framer-motion"
 import axios from "axios"
@@ -20,8 +21,8 @@ const PizzaSection = () => {
   const [cart, Setcart] = useState([])
   const [pizzas, setPizzas] = useState<Pizza[]>([]);
 
-  const addtoCart = () => {
-    toast.success("Added pizza to cart! 🍕")
+  const addtoCart = (p: any) => {
+    toast.success(`${p.name} cart! 🍕`)
   }
 
   useEffect(() => {
@@ -109,15 +110,17 @@ const PizzaSection = () => {
               </div>
 
               {/* Pricing & Call to Action Footer Row */}
-              <div className="flex justify-between items-center pt-2">
+              <div className="flex justify-between items-center pt-2 ">
                 <span className="text-orange-400 font-black text-lg tracking-wide">₹{p.price}</span>
+
                 <button
-                  onClick={addtoCart}
-                  className="bg-orange-500 text-black border-none rounded-xl px-4 py-2 text-xs font-bold tracking-wide cursor-pointer hover:bg-orange-600 hover:scale-105 active:scale-95 transition-all shadow-md shadow-orange-500/10"
+                  onClick={() => addtoCart(p)}
+                  className="bg-orange-500 flex justify-between items-center pt-2 gap-1  text-black border-none rounded-xl px-4 py-2 text-xs font-bold tracking-wide cursor-pointer hover:bg-orange-600 hover:scale-105 active:scale-95 transition-all shadow-md shadow-orange-500/10"
                 >
-                  + Add
+                  + Add <FaCartPlus size={15} />
                 </button>
               </div>
+
             </div>
           </motion.div>
         ))}
