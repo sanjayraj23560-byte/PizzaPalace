@@ -22,10 +22,9 @@ const Navbar = () => {
   return (
     <nav
       className="fixed top-0 left-0 right-0 z-99">
-      <div className="flex items-stretch justify-around bg-[#0e0b0832] backdrop-blur-3xl pt-2 pb-2.5 border-b border-white/5">
+      <div className="flex items-stretch justify-around bg-[#0e0b0832] backdrop-blur-3xl pt-2 pb-2.5 border-b border-amber-900">
         {links.map(({ label, path, icon }) => {
           const isActive = pathname === path
-
           return (
             <button
               key={path}

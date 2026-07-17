@@ -35,8 +35,9 @@ export default function RootLayout({
         <div className="mt-18"> {children} </div>
         <ToastContainer
           position="top-right"
-          autoClose={3000}
-          theme="dark"
+          className={"z-9999"}
+          autoClose={2000}
+          theme="colored"
         />
         <Footer />
       </body>

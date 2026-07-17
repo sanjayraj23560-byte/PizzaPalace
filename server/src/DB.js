@@ -1,10 +1,15 @@
 import dotenv from 'dotenv'
 import mongoose from "mongoose";
 
-const DataBase = () => {
-    mongoose.connect(`mongodb+srv://Newuser_1:fssxYPHGwcd33sKb@cluster0.7uqxnrv.mongodb.net/?appName=Cluster0&compressors=zlib`)
-        .then(() => console.log("DB connected"))
-        .catch((err)=>console.log(err))
+const DataBase = async () => {
+    try {
+        await mongoose.connect(`mongodb+srv://pizza_palace:yeCcSnikNMECsFXa@cluster0.7uqxnrv.mongodb.net/pizzapalace?appName=Cluster0&compressors=zlib`)
+        console.log("Database:", mongoose.connection.name);
+        console.log("DB connected")
+    } catch (error) {
+        console.log(error)
+    }
+
 }
 
 export default DataBase

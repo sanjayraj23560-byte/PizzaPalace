@@ -1,4 +1,4 @@
-import express, { json } from 'express';
+import express from 'express'; // 💡 Cleaned up the import
 import DataBase from './DB.js';
 import cors from 'cors';
 import router from '../Routers/index.js';
@@ -6,16 +6,22 @@ import router from '../Routers/index.js';
 const app = express();
 const PORT = 4000;
 
-app.use(cors());
+// 1. Enable CORS first
+app.use(cors({
+    origin: "http://localhost:3000",
+    credentials: true
+}));
+
+app.use(express.json());
+
 DataBase();
 
-app.use('/api', router)
+app.use('/api', router);
 
 app.get('/', (req, res) => {
-    res.send("Server is runnig 🖥️")
-})
+    res.send("Server is running 🖥️")
+});
 
-app.use(express(json()));
 app.listen(PORT, () => {
-    console.log(`Sever started on port ${PORT}`)
+    console.log(`Server started on port ${PORT}`)
 });
