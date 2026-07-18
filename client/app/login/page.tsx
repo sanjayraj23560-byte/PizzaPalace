@@ -2,19 +2,22 @@
 import React, { useState } from 'react';
 import { auth, googleProvider } from '../../components/firebase';
 import { signInWithPopup } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
 export default function Login() {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
-
+  const navi = useRouter();
   // Fixed the naming collision here from 'Login' to 'handleGoogleLogin'
   const handleGoogleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       console.log(user);
-
+      if (user) {
+        navi.push('/')
+      }
       // Clean string interpolation spacing for toast alert
       toast.success(`Welcome back, ${user.displayName || 'Palace Guest'}!`);
     } catch (error) {

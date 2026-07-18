@@ -22,7 +22,7 @@ interface CartContextType {
 }
 
 // 2. FIXED: Give the Context a explicit fallback structural object instead of blank/undefined
-export const CartContext = createContext < CartContextType > ({
+export const CartContext = createContext<CartContextType>({
     cart: [],
     addToCart: async () => { },
     removeFromCart: async () => { },
@@ -31,7 +31,7 @@ export const CartContext = createContext < CartContextType > ({
 });
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [cart, setCart] = useState < CartItem[] > ([]);
+    const [cart, setCart] = useState<CartItem[]>([]);
 
     const getUser = () => {
         if (typeof window !== "undefined") {
@@ -72,10 +72,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const userId = getUserId();
         if (!userId) return;
         try {
-            const response = await axios.post(`${process.env.VITE_API_URL}/api/cart/add`, {
+            const response = await axios.post(`http://localhost:4000/api/cart/add`, {
                 userId: userId,
                 product: product,
             });
+            console.log(response)
+            console.log(product)
             if (response.data && response.data.items) {
                 setCart(response.data.items);
             }
@@ -89,8 +91,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (!userId) return;
         try {
             const response = await axios.post(`${process.env.VITE_API_URL}/api/cart/remove`, {
-                userId: userId,
-                productId: productId,
+                userId    :    userId,
+                productId  : productId,
             });
             if (response.data && response.data.items) {
                 setCart(response.data.items);

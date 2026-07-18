@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { auth } from '../../components/firebase';
 import { motion, AnimatePresence } from "framer-motion";
 import { CartContext } from "../../context/cartContext";
-import { CartProvider } from "../../context/cartContext";
 
 import axios from "axios";
 

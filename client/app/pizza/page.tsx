@@ -2,7 +2,9 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { FaCartPlus } from "react-icons/fa6"
+import { useContext } from "react"
 import { toast } from "react-toastify"
+import { CartContext } from "@/context/cartContext"
 import { motion } from "framer-motion"
 import axios from "axios"
 
@@ -17,11 +19,12 @@ const stagger = { animate: { transition: { staggerChildren: 0.06 } } }
 const fadeUp = { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0, transition: { duration: 0.3 } } }
 
 const PizzaSection = () => {
+  const { cart, addToCart, removeFromCart, getCartTotal, clearCart } = useContext(CartContext);
   const navi = useRouter()
-  const [cart, Setcart] = useState([])
   const [pizzas, setPizzas] = useState<Pizza[]>([]);
 
   const addtoCart = (p: any) => {
+    addToCart(p)
     toast.success(`${p.name} cart! 🍕`)
   }
 

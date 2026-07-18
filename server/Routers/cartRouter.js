@@ -24,7 +24,8 @@ router.post('/remove', async (req, res) => {
 
 router.post('/add', async (req, res) => {
     try {
-
+        const { userId, productId } = req.body
+        console.log(userId, productId)
     } catch (error) {
         console.log(error)
     }
