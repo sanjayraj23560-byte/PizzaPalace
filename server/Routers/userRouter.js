@@ -5,7 +5,7 @@ const router = express.Router();
 router.post("/ret", async (req, res) => {
     try {
         const { username, password } = req.body;
-        console.log("hey there", username)
+        // console.log("hey there", username)
         const newData = userModel.model({
             username: username,
             password: password
