@@ -33,7 +33,7 @@ function Page() {
         try {
             setLoading(true);
             // Fire the network payload string cleanly
-            const res = await axios.post(`http://localhost:4000/api/user/ret`, formatData);
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/user/ret`, formatData);
 
             console.log("Response data:", res.data);
             toast.success("Data added successfully! 🎉");

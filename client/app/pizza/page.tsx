@@ -1,10 +1,12 @@
 'use client'
+
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { FaCartPlus } from "react-icons/fa6"
 import { useContext } from "react"
+import { useCart } from "@/context/cartContext"
 import { toast } from "react-toastify"
-import { CartContext } from "@/context/cartContext"
+import { CartContext, CartProvider } from "@/context/cartContext"
 import { motion } from "framer-motion"
 import axios from "axios"
 
@@ -19,20 +21,21 @@ const stagger = { animate: { transition: { staggerChildren: 0.06 } } }
 const fadeUp = { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0, transition: { duration: 0.3 } } }
 
 const PizzaSection = () => {
-  const { cart, addToCart, removeFromCart, getCartTotal, clearCart } = useContext(CartContext);
+  // const { addToCart } =   CartProvider
+  const { cart, addToCart, removeFromCart, getCartTotal, clearCart } = useCart()
   const navi = useRouter()
   const [pizzas, setPizzas] = useState<Pizza[]>([]);
 
-  const addtoCart = (p: any) => {
-    console.log(p,"Heyy")
-    addToCart(p)
+  const addtoCart = async (p: any) => {
+    // console.log(p, "Heyy")
+    await addToCart(p)
     toast.success(`${p.name} cart! 🍕`)
   }
 
   useEffect(() => {
     const Fetch_pizza = async () => {
       try {
-        const res = await axios.get(`http://localhost:4000/api/getpizza`)
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/getpizza`)
         if (res.data && res.data.getPizza) {
           setPizzas(res.data.getPizza)
         }

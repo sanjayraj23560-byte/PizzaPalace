@@ -45,8 +45,8 @@ const Home = () => {
     const fetchFeatured = async () => {
       try {
         const [pizzaRes, drinkRes] = await Promise.all([
-          axios.get(`http://localhost:4000/api/getpizza`),
-          axios.get(`http://localhost:4000/api/getdrinks`)
+          axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/getpizza`),
+          axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/getdrinks`)
         ]);
 
         // Safely pull variables depending on how your backend array payload is wrapped

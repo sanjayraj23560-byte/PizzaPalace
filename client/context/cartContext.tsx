@@ -1,10 +1,9 @@
 'use client';
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { auth } from "@/components/firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import { User, onAuthStateChanged } from "firebase/auth";
 
-// 1. Explicitly Type check your structure shapes
 interface CartItem {
     productId: string;
     name: string;
@@ -21,7 +20,6 @@ interface CartContextType {
     getCartTotal: () => number;
 }
 
-// 2. FIXED: Give the Context a explicit fallback structural object instead of blank/undefined
 export const CartContext = createContext<CartContextType>({
     cart: [],
     addToCart: async () => { },
@@ -32,52 +30,54 @@ export const CartContext = createContext<CartContextType>({
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [cart, setCart] = useState<CartItem[]>([]);
+    const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState<boolean>(true); // Keeps track of initial loading state
 
-    const getUser = () => {
-        if (typeof window !== "undefined") {
-            return JSON.parse(localStorage.getItem("user") || "{}");
-        }
-        return null;
-    };
-
-    const getUserId = () => getUser()?._id;
-
-    // FIXED: Track auth state asynchronously instead of executing static check once globally
+    // 1. Manage Auth State Subscription Lifecycle
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                fetchCart();
-            } else {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+            setLoading(false); // Stop loading once Firebase resolves the user status
+            if (!currentUser) {
                 setCart([]); // Clear state if user signs completely out
             }
         });
 
+        return () => unsubscribe(); // Properly clean up the event listener on unmount
+    }, []);
+
+    // 2. Fetch Cart Data only when the actual user object shifts into place
+    useEffect(() => {
         const fetchCart = async () => {
+            if (!user?.uid) return; // Guard clause: Prevent fetching if UID doesn't exist yet
+
             try {
-                // Fall back to target server address safely
-                const apiUrl = process.env.NEXT_API_URL || "http://localhost:4000";
-                const res = await axios.get(`${apiUrl}/api/cart`);
+                const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+                const res = await axios.get(`${apiUrl}/api/cart/${user.uid}`);
                 if (res.data && res.data.items) {
                     setCart(res.data.items);
                 }
             } catch (error) {
-                console.log("No existing cart found:", error);
+                console.log("No existing cart found or failed to fetch:", error);
             }
         };
 
-        return () => unsubscribe();
-    }, []);
+        if (!loading && user) {
+            fetchCart();
+        }
+    }, [user, loading]); // Fires specifically when user shifts from null -> authenticated status
 
     const addToCart = async (product: any) => {
-        const userId = getUserId();
-        if (!userId) return;
+        if (!user?.uid) {
+            console.log("Cannot add to cart: No authenticated user found");
+            return;
+        }
         try {
-            const response = await axios.post(`http://localhost:4000/api/cart/add`, {
-                userId: userId,
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/cart/add`, {
+                userId: user.uid, // Send the string UID instead of the whole object
                 product: product,
             });
-            console.log(response)
-            console.log(product)
+
             if (response.data && response.data.items) {
                 setCart(response.data.items);
             }
@@ -87,12 +87,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const removeFromCart = async (productId: string) => {
-        const userId = getUserId();
-        if (!userId) return;
+        if (!user?.uid) return;
         try {
-            const response = await axios.post(`${process.env.VITE_API_URL}/api/cart/remove`, {
-                userId    :    userId,
-                productId  : productId,
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/cart/remove`, {
+                userId: user.uid, // Send the string UID
+                productId: productId,
             });
             if (response.data && response.data.items) {
                 setCart(response.data.items);
@@ -115,3 +114,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         </CartContext.Provider>
     );
 };
+
+export function useCart() {
+    return useContext(CartContext);
+}

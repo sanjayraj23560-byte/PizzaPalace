@@ -3,7 +3,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ToastContainer } from 'react-toastify'
 import "./globals.css";
+import { CartContext } from "@/context/cartContext";
 import Footer from "../components/footer";
+import { CartProvider } from "@/context/cartContext";
 import Navbar from "../components/navbar";
 import 'react-toastify/dist/ReactToastify.css';
 const geistSans = Geist({
@@ -31,15 +33,19 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
+
         <Navbar />
-        <div className="mt-18"> {children} </div>
-        <ToastContainer
-          position="top-right"
-          className={"z-9999"}
-          autoClose={2000}
-          theme="colored"
-        />
+        <CartProvider>
+          <div className="mt-18"> {children} </div>
+          <ToastContainer
+            position="top-right"
+            className={"z-9999"}
+            autoClose={2000}
+            theme="colored"
+          />
+        </CartProvider >
         <Footer />
+
       </body>
     </html>
   );

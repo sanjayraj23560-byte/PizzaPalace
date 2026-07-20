@@ -1,36 +1,46 @@
 import mongoose from "mongoose";
+
 const cartSchema = new mongoose.Schema({
     userId: {
         required: true,
         type: String
     },
     items: [{
-        procuctId: {
+        productId: {         // Fixed the typo from procuctId -> productId
             type: String,
             required: true
+        },
+        desc: {
+            required: false, // Changed to false if it's not always sent
+            type: String
         },
         name: {
             type: String,
             required: true
         },
         price: {
-            type: String,
+            type: Number,    // Changed to Number for clean calculations
             required: true
         },
         quantity: {
-            type: String,
-            required: true
+            type: Number,    // Changed to Number
+        },
+        img: {
+            required: true,
+            type: String
         }
     }],
-    createdAt:{
-        required:true,
-        type:Date
+    createdAt: {
+        required: true,
+        type: Date,
+        default: Date.now    // Automatically handles creation timestamp
     },
-    updatedAt:{
-        required:true,
-        type:Date
+    updatedAt: {
+        required: true,
+        type: Date,
+        default: Date.now
     },
 });
 
-const cartModel = new mongoose.model("cart", cartSchema);
+const cartModel = mongoose.models.cart || mongoose.model("cart", cartSchema);
 export default cartModel;

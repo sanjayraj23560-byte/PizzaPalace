@@ -22,7 +22,7 @@ const DrinkSection = () => {
   useEffect(() => {
     const fetchDrinks = async () => {
       try {
-        const res = await axios.get(`http://localhost:4000/api/getdrinks`);
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/getdrinks`);
         if (res.data && res.data.getDrinks) {
           setDrinks(res.data.getDrinks);
         }
