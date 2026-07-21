@@ -76,8 +76,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/cart/add`, {
                 userId: user.uid, // Send the string UID instead of the whole object
                 product: product,
+                productId: product._id
             });
-
+            console.log(product)
+            console.log(response)
             if (response.data && response.data.items) {
                 setCart(response.data.items);
             }
@@ -88,12 +90,14 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const removeFromCart = async (productId: string) => {
         if (!user?.uid) return;
+        console.log("Haaa!")
         try {
             const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/cart/remove`, {
                 userId: user.uid, // Send the string UID
-                productId: productId,
+                productId: productId
             });
-            if (response.data && response.data.items) {
+            console.log(response)
+            if (response.status === 201) {
                 setCart(response.data.items);
             }
         } catch (error) {

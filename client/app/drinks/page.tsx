@@ -4,6 +4,8 @@ import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { toast } from "react-toastify";
+import { CartContext } from "@/context/cartContext";
+import { useCart } from "@/context/cartContext";
 
 interface DrinkItem {
   name: string;
@@ -15,7 +17,7 @@ interface DrinkItem {
 const DrinkSection = () => {
   const stagger = { animate: { transition: { staggerChildren: 0.06 } } }
   const fadeUp = { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0, transition: { duration: 0.3 } } }
-
+  const { addToCart, cart, clearCart, getCartTotal, removeFromCart } = useCart()
   const [drinks, setDrinks] = useState<DrinkItem[]>([])
   const navi = useRouter()
 
@@ -46,6 +48,7 @@ const DrinkSection = () => {
   }, [navi])
 
   const handleAdd = (d: DrinkItem) => {
+    addToCart(d)
     toast.success(`${d.name} added to cart! 🥤`);
   }
 

@@ -2,10 +2,16 @@
 import React, { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
 import { auth } from '../../components/firebase';
+import { FaBowlFood } from "react-icons/fa6";
+import { FaTrash } from "react-icons/fa6";
+import { FaPizzaSlice } from "react-icons/fa6";
+import { IoFastFoodSharp } from "react-icons/io5";
 import { motion, AnimatePresence } from "framer-motion";
 import { CartContext } from "../../context/cartContext";
 
 import axios from "axios";
+import { toast } from "react-toastify";
+import { reload } from "firebase/auth";
 
 interface CartItem {
   productId: string;
@@ -49,6 +55,11 @@ const Cart: React.FC = () => {
   const user = auth.currentUser;
   const userId = auth.currentUser?.uid;
 
+  const removeItemFromCart = (item: any) => {
+    reload
+    removeFromCart(item)
+    toast.info("Removed from cart")
+  }
   // Fully Typed Input Change Handler
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAddress({ ...address, [e.target.name]: e.target.value });
@@ -161,8 +172,8 @@ const Cart: React.FC = () => {
       {(!cart || cart.length === 0) ? (
         <div className="text-center mt-16 text-gray-500">
           <i className="ti ti-shopping-cart text-5xl block mb-3 text-gray-600" />
-          <h2 className="text-xl font-bold text-amber-600 mb-2">Login before adding to cart</h2>
-          <p className="text-xs">Your cart is currently empty</p>
+          <h2 className="text-xl font-bold text-amber-200 mb-2">Empty cart </h2>
+          <button onClick={() => navi.push('/')} className="border-2 border-gray-600 rounded-2xl p-4 text-xl font-bold text-amber-600 mb-2">Get healthy snack <div className="flex flex-row justify-between"> <FaBowlFood /> <IoFastFoodSharp /> <FaPizzaSlice /></div></button>
         </div>
       ) : (
         <div className="max-w-xl mx-auto space-y-6">
@@ -203,6 +214,12 @@ const Cart: React.FC = () => {
                   >
                     +
                   </button>
+                  <button
+                    onClick={() => removeItemFromCart(item)}
+                    className="w-7 h-7 flex items-center justify-center rounded-lg bg-red-500 text-black text-base font-bold hover:bg-orange-600 active:scale-95 transition-all"
+                  >
+                    <FaTrash />
+                  </button>
                 </div>
               </motion.div>
             ))}
@@ -239,7 +256,8 @@ const Cart: React.FC = () => {
             </button>
           </motion.div>
         </div>
-      )}
+      )
+      }
 
       {/* Checkout Drawer Sheet Container */}
       <AnimatePresence>
@@ -413,7 +431,7 @@ const Cart: React.FC = () => {
           </>
         )}
       </AnimatePresence>
-    </div>
+    </div >
   );
 };
 

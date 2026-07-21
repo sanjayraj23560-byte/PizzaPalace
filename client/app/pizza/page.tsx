@@ -27,7 +27,7 @@ const PizzaSection = () => {
   const [pizzas, setPizzas] = useState<Pizza[]>([]);
 
   const addtoCart = async (p: any) => {
-    // console.log(p, "Heyy")
+
     await addToCart(p)
     toast.success(`${p.name} cart! 🍕`)
   }
