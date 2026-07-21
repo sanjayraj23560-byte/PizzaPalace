@@ -86,60 +86,62 @@ const Cart: React.FC = () => {
       const res = await axios.post(`http://localhost:4000/api/orderPayment/create-order`, {
         amount: getCartTotal()
       });
-
       console.log(res)
-      const order = res.data;
-      if (!order || !order.amount) {
+      if (res.status === 400) {
         alert("Payment initialization failed! Please try again.");
         setPlacing(false);
         return;
       }
-
-      const options = {
-        key: process.env.NEXT_RAZORPAY_KEY_ID,
-        amount: order.amount,
-        currency: "INR",
-        name: "PizzaPalace",
-        description: "Order Payment",
-        order_id: order.id,
-        handler: async (response: { razorpay_payment_id: string }) => {
-          try {
-            await axios.post(`${process.env.NEXT_API_URL}/api/orderpayment/verify-sign`, {
-              cart: cart,
-              total: getCartTotal(),
-              username: auth.currentUser?.displayName,
-              userId: userId,
-              address: address,
-              paymentId: response.razorpay_payment_id
-            });
-            clearCart();
-            setShowAddressModal(false);
-            setStep("address");
-            navi.push('/order');
-          } catch (err) {
-            console.error("Order Error:", err);
-            alert("Payment done but order failed! Contact support.");
-            setPlacing(false);
-          }
-        },
-        prefill: {
-          name: address.name,
-          contact: address.phone,
-        },
-        theme: { color: "#ea580c" },
-        modal: {
-          ondismiss: () => setPlacing(false)
-        }
-      };
-
-      const razorpay = new window.Razorpay(options);
-      razorpay.open();
-
+      initilizePayment(res.data.order)
     } catch (err) {
       console.error("Payment init error:", err);
       setPlacing(false);
     }
   };
+
+  const initilizePayment = (order) => {
+    const options = {
+      key_id: process.env.NEXT_RAZORPAY_KEY_ID,
+      amount: order.amount,
+      currency: "INR",
+      description: "Order Payment",
+      order_id: order.id,
+      handler: async (response: { razorpay_payment_id: string }) => {
+        try {
+          console.log("Initing payment !")
+          await axios.post(`http://localhost:4000/api/orderpayment/verify-sign`, {
+            ...response,
+            cart: cart,
+            total: getCartTotal(),
+            username: auth.currentUser?.displayName,
+            userId: userId,
+            address: address,
+            paymentId: response.razorpay_payment_id
+          });
+          clearCart();
+          setShowAddressModal(false);
+          setStep("address");
+          // razorpay.open();
+        } catch (err) {
+          console.error("Order Error:", err);
+          alert("Payment done but order failed! Contact support.");
+          setPlacing(false);
+        }
+      },
+      // prefill: {
+      //   name: address.name,
+      //   contact: address.phone,
+      // },
+      // theme: { color: "#ea580c" },
+      // modal: {
+      //   ondismiss: () => setPlacing(false)
+      // }
+    };
+    const razorpay = new window.Razorpay(options);
+    razorpay.open()
+  }
+
+
 
   return (
     <div className="w-full min-h-screen bg-black font-sans px-5 pt-6 pb-32 text-gray-400">

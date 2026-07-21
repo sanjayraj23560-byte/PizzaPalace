@@ -4,7 +4,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const router = Router();
-console.log("Key ID :" + process.env.RAZORPAY_KEY_ID)
 router.post('/create-order', async (req, res) => {
     try {
         const razorpay = new Razorpay({
@@ -12,23 +11,24 @@ router.post('/create-order', async (req, res) => {
             key_secret: process.env.RAZORPAY_KEY_SECRET,
         })
         const { amount } = req.body
-        console.log(amount)
         const order = await razorpay.orders.create({
             amount: amount * 100,
             currency: 'INR',
-            recipt: `Order ${Date.now()}`,
-            notes: "Order confirmed..!"
+            receipt: `Order ${Date.now()}`
         })
-        console.log(order)
-        res.status(200).send(order)
+        if (!order) {
+            res.status(200).send("Order failed ...!")
+        }
+        res.status(200).json({ order })
     } catch (error) {
-        console.log("Error section : - "+{error})
+        console.log(error)
     }
 })
 
 router.post('/verify-sign', async (req, res) => {
     try {
-
+        // const { cart, total, username, userId, address,paymentId } = req.body
+        console.log(req.body)
     } catch (error) {
         console.log(error)
     }

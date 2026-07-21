@@ -7,7 +7,6 @@ const router = Router()
 router.get('/', async (req, res) => {
     try {
         const getPizza = await pizzaModel.find()
-        console.log(getPizza)
         res.json({ getPizza })
     } catch (error) {
         console.log(error)

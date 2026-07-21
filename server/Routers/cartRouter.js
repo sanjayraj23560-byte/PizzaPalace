@@ -53,7 +53,6 @@ router.post('/remove', async (req, res) => {
 router.post('/add', async (req, res) => {
     try {
         const { userId, product, productId } = req.body;
-        console.log(userId, product, "This -> ", productId);
 
         if (!userId || !product || !productId) {
             return res.status(400).json({ message: "Invalid payload: Missing required identifiers" });
