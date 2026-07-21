@@ -2,24 +2,29 @@
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { auth } from "@/components/firebase";
+import { FaHeadset } from "react-icons/fa6";
+import { Heart, Ticket, Crown, HelpCircle } from "lucide-react";
+import { ListOrdered } from "lucide-react";
 import { signOut, onAuthStateChanged, User } from "firebase/auth";
 import { toast } from "react-toastify";
-import { useEffect, useState } from "react";
+import { useEffect, useState, ElementType } from "react";
 
+// 1. Update interface so icon accepts a React Component instead of a string
 interface MenuItem {
     label: string;
-    icon: string;
+    icon: ElementType; // Accepts both Lucide & React-Icons components
     path: string;
     color: string;
     desc: string;
 }
 
+// 2. Pass imported icon component references directly (without quotes!)
 const menuItems: MenuItem[] = [
-    { label: "My Orders", icon: "Package", path: "/order", color: "#ff6464", desc: "Track & reorder" },
-    { label: "Wishlist", icon: "ti-heart", path: "/wishlist", color: "#ff6b8a", desc: "Saved favourites" },
-    { label: "Coupons", icon: "ti-ticket", path: "/coupons", color: "#ffc850", desc: "Deals & offers" },
-    { label: "Membership", icon: "ti-crown", path: "/member", color: "#f5c842", desc: "Your tier & perks" },
-    { label: "Help", icon: "ti-help-circle", path: "/help", color: "#50b4ff", desc: "Support & FAQs" },
+    { label: "My Orders", icon: ListOrdered, path: "/order", color: "#ff6464", desc: "Track & reorder" },
+    { label: "Wishlist", icon: Heart, path: "/wishlist", color: "#ff6b8a", desc: "Saved favourites" },
+    { label: "Coupons", icon: Ticket, path: "/coupons", color: "#ffc850", desc: "Deals & offers" },
+    { label: "Membership", icon: Crown, path: "/member", color: "#f5c842", desc: "Your tier & perks" },
+    { label: "Help", icon: FaHeadset, path: "/help", color: "#50b4ff", desc: "Support & FAQs" },
 ];
 
 const stagger = { animate: { transition: { staggerChildren: 0.08 } } };
@@ -30,14 +35,13 @@ const Account = () => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
-    // FIXED: Real-time Firebase Authentication listener tracking state changes properly
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
             setLoading(false);
         });
 
-        return () => unsubscribe(); // Clean up subscription socket on component unmount
+        return () => unsubscribe();
     }, []);
 
     const handleSignOut = async () => {
@@ -127,28 +131,34 @@ const Account = () => {
 
             {/* Navigation Options Menu */}
             <motion.div variants={stagger} initial="initial" animate="animate" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {menuItems.map(m => (
-                    <motion.div
-                        key={m.path}
-                        variants={fadeUp}
-                        className="card"
-                        onClick={() => navi.push(m.path)}
-                        style={{ padding: "16px 18px", display: "flex", alignItems: "center", gap: 14, cursor: "pointer", background: "#0f172a", borderRadius: 16 }}
-                        whileHover={{ x: 6, transition: { duration: 0.2 } }}
-                    >
-                        <div style={{ width: 44, height: 44, borderRadius: 12, background: `${m.color}18`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                            <i className={`ti ${m.icon}`} style={{ fontSize: 20, color: m.color }} />
-                        </div>
-                        <div style={{ flex: 1 }}>
-                            <p style={{ fontWeight: 600, fontSize: "0.95rem", color: "#fff" }}>{m.label}</p>
-                            <p style={{ color: "#6b7280", fontSize: "0.78rem" }}>{m.desc}</p>
-                        </div>
-                        <span style={{ color: "#6b7280", fontSize: 18 }}>→</span>
-                    </motion.div>
-                ))}
+                {menuItems.map(m => {
+                    // 3. Assign component reference to a capitalized variable
+                    const IconComponent = m.icon;
+
+                    return (
+                        <motion.div
+                            key={m.path}
+                            variants={fadeUp}
+                            className="card"
+                            onClick={() => navi.push(m.path)}
+                            style={{ padding: "16px 18px", display: "flex", alignItems: "center", gap: 14, cursor: "pointer", background: "#0f172a", borderRadius: 16 }}
+                            whileHover={{ x: 6, transition: { duration: 0.2 } }}
+                        >
+                            <div style={{ width: 44, height: 44, borderRadius: 12, background: `${m.color}18`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                                {/* 4. Render as a JSX Component */}
+                                <IconComponent style={{ fontSize: 20, color: m.color, width: 20, height: 20 }} />
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <p style={{ fontWeight: 600, fontSize: "0.95rem", color: "#fff" }}>{m.label}</p>
+                                <p style={{ color: "#6b7280", fontSize: "0.78rem" }}>{m.desc}</p>
+                            </div>
+                            <span style={{ color: "#6b7280", fontSize: 18 }}>→</span>
+                        </motion.div>
+                    );
+                })}
             </motion.div>
 
-            {/* FIXED: Action Triggers mapped cleanly to inverted authorization rules */}
+            {/* Action Triggers */}
             <div style={{ marginTop: 20 }}>
                 {user ? (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>

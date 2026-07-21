@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useCart } from "@/context/cartContext";
 
 // 🚀 LESSON 1: Set explicit data types (string, number), NEVER literal booleans (true)
 interface MenuItem {
@@ -20,6 +21,7 @@ const fadeUp = { initial: { opacity: 0, y: 24 }, animate: { opacity: 1, y: 0, tr
 
 const Home = () => {
   const navigate = useRouter();
+  const { addToCart, cart, clearCart, getCartTotal, removeFromCart } = useCart()
   const [loading, setLoading] = useState(true);
   const [pizzas, setPizzas] = useState<MenuItem[]>([]);
   const [drinks, setDrinks] = useState<MenuItem[]>([]);
@@ -68,6 +70,7 @@ const Home = () => {
   }, []);
 
   const handleAdd = (item: MenuItem) => {
+    addToCart(item)
     toast.success(`${item.name} added to cart! 🛒`);
   };
 

@@ -10,7 +10,6 @@ router.get('/:uid', async (req, res) => {
             userId: id
         })
         res.send(cartData)
-        console.log("Id :", id)
     } catch (error) {
         console.log(error)
     }
@@ -24,9 +23,6 @@ router.post('/remove', async (req, res) => {
         const targetProductId = typeof productId === 'object' && productId !== null
             ? productId.productId
             : productId;
-
-        console.log("Processing Remove -> User id:", userId, "Pro id:", targetProductId);
-
         if (!userId || !targetProductId) {
             return res.status(400).json({ message: "Missing required fields: userId or productId" });
         }
@@ -44,8 +40,6 @@ router.post('/remove', async (req, res) => {
         if (!updatedCart) {
             return res.status(404).json({ message: "Cart not found for this user" });
         }
-
-        console.log("Item pulled successfully!");
 
         // 3. Return the updated cart items so your frontend state syncs immediately
         return res.status(201).json(updatedCart);
