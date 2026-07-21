@@ -99,7 +99,7 @@ const Cart: React.FC = () => {
     }
   };
 
-  const initilizePayment = (order) => {
+  const initilizePayment = (order:any) => {
     const options = {
       key_id: process.env.NEXT_RAZORPAY_KEY_ID,
       amount: order.amount,
