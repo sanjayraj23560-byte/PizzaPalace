@@ -83,11 +83,11 @@ const Cart: React.FC = () => {
     setPlacing(true);
 
     try {
-      const res = await axios.post(`${process.env.VITE_API_URL}/api/membership/create-order`, {
-        amount: getCartTotal(),
-        membership: "order"
+      const res = await axios.post(`http://localhost:4000/api/orderPayment/create-order`, {
+        amount: getCartTotal()
       });
 
+      console.log(res)
       const order = res.data;
       if (!order || !order.amount) {
         alert("Payment initialization failed! Please try again.");
@@ -104,7 +104,7 @@ const Cart: React.FC = () => {
         order_id: order.id,
         handler: async (response: { razorpay_payment_id: string }) => {
           try {
-            await axios.post(`${process.env.NEXT_API_URL}/api/order`, {
+            await axios.post(`${process.env.NEXT_API_URL}/api/orderpayment/verify-sign`, {
               cart: cart,
               total: getCartTotal(),
               username: auth.currentUser?.displayName,
