@@ -14,6 +14,7 @@ function Page() {
 
     const handlechange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
+        console.log(name)
         setFormatData((prev) => ({
             ...prev,
             [name]: value,
