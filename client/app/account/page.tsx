@@ -98,7 +98,7 @@ const Account = () => {
                 >
                     <div style={{ width: 60, height: 60, borderRadius: "50%", display: "flex", alignItems: "center", flexShrink: 0, overflow: "hidden" }}>
                         <img
-                            src={user.photoURL || `https://api.dicebear.com/7.x/initials/svg?seed=${user.displayName || 'User'}`}
+                            src={user.photoURL || `https://api.dicebear.com/7.x/initials/svg?seed=${user.displayName}`}
                             alt="Profile avatar"
                             className="w-full h-full object-cover border-2 border-orange-500"
                         />

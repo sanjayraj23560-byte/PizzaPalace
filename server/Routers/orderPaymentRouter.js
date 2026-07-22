@@ -27,8 +27,9 @@ router.post('/create-order', async (req, res) => {
 
 router.post('/verify-sign', async (req, res) => {
     try {
-        // const { cart, total, username, userId, address,paymentId } = req.body
+        // const { cart, total, username, userId, paymentId } = req.body
         console.log(req.body)
+        res.send("Signature verification !")
     } catch (error) {
         console.log(error)
     }

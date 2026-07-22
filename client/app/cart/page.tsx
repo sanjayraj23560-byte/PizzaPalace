@@ -21,6 +21,12 @@ interface CartItem {
   quantity: number;
 }
 
+interface RazorpayOrderResponse {
+  id: string;
+  amount: number;
+  currency: string;
+}
+
 interface AddressState {
   name: string;
   phone: string;
@@ -92,31 +98,25 @@ const Cart: React.FC = () => {
         setPlacing(false);
         return;
       }
-      initilizePayment(res.data.order)
+      initilizePayment(res.data)
     } catch (err) {
       console.error("Payment init error:", err);
       setPlacing(false);
     }
   };
 
-  const initilizePayment = (order:any) => {
+  const initilizePayment = (order: RazorpayOrderResponse) => {
     const options = {
-      key_id: process.env.NEXT_RAZORPAY_KEY_ID,
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       amount: order.amount,
-      currency: "INR",
-      description: "Order Payment",
+      currency: order.currency,
+      description: "order!",
       order_id: order.id,
-      handler: async (response: { razorpay_payment_id: string }) => {
+      handler: async (response: RazorpayOrderResponse ) => {
         try {
           console.log("Initing payment !")
           await axios.post(`http://localhost:4000/api/orderpayment/verify-sign`, {
-            ...response,
-            cart: cart,
-            total: getCartTotal(),
-            username: auth.currentUser?.displayName,
-            userId: userId,
-            address: address,
-            paymentId: response.razorpay_payment_id
+            response,
           });
           clearCart();
           setShowAddressModal(false);
@@ -124,20 +124,20 @@ const Cart: React.FC = () => {
           // razorpay.open();
         } catch (err) {
           console.error("Order Error:", err);
-          alert("Payment done but order failed! Contact support.");
+          toast.error("Payment done but order failed! Contact support")
           setPlacing(false);
         }
       },
-      // prefill: {
-      //   name: address.name,
-      //   contact: address.phone,
-      // },
-      // theme: { color: "#ea580c" },
-      // modal: {
-      //   ondismiss: () => setPlacing(false)
-      // }
+      prefill: {
+        name: address.name,
+        contact: address.phone,
+      },
+      theme: { color: "#ea580c" },
+      modal: {
+        ondismiss: () => setPlacing(false)
+      }
     };
-    const razorpay = new window.Razorpay(options);
+    const razorpay = (window as any).Razorpay(options);
     razorpay.open()
   }
 

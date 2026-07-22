@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ToastContainer } from 'react-toastify'
 import "./globals.css";
 import { CartContext } from "@/context/cartContext";
+import Script from "next/script";
 import Footer from "../components/footer";
 import { CartProvider } from "@/context/cartContext";
 import Navbar from "../components/navbar";
@@ -29,11 +30,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+      <head>
+        <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
+      </head>
       <body className="min-h-full flex flex-col">
-
         <Navbar />
         <CartProvider>
           <div className="mt-18"> {children} </div>
