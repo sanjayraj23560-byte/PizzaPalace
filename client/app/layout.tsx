@@ -40,9 +40,9 @@ export default function RootLayout({
           <div className="mt-18"> {children} </div>
           <ToastContainer
             position="top-right"
-            className={"z-9999 mt-15"}
+            className="z-[9999] mt-16"
             autoClose={2000}
-            theme="colored"
+            theme="dark"
           />
         </CartProvider >
         <Footer />

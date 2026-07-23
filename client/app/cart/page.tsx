@@ -62,7 +62,7 @@ const Cart: React.FC = () => {
   const userId = auth.currentUser?.uid;
   const router = useRouter()
   const removeItemFromCart = (item: any) => {
-    reload
+    window.location.reload();
     removeFromCart(item)
     toast.info("Removed from cart")
   }
@@ -123,8 +123,20 @@ const Cart: React.FC = () => {
           setStep("address");
           if (res.status === 200 || res.data === true) {
             toast.success("Payment Done...!")
-            clearCart()
-            router.push('/order')
+            const OnOrder = async () => {
+              const res = await axios.post(`http://localhost:4000/api/order/getOrder`, {
+                cart
+              })
+              if (res.status === 200) {
+                clearCart()
+                setTimeout(() => {
+                  window.location.reload();
+                }, 1000);
+                router.push('/order')
+              }
+            }
+            OnOrder()
+
           }
           // razorpay.open();
         } catch (err) {

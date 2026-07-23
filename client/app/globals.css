@@ -4,3 +4,93 @@ body {
   background: #000;
   color: rgb(232, 232, 232);
 }
+
+/* =========================================================
+   PIZZA PALACE HIGH-SPECIFICITY GLASS TOASTS
+   ========================================================= */
+
+/* Force container position */
+html body .Toastify__toast-container {
+  z-index: 99999 !important;
+}
+
+/* Force base glass card */
+html body .Toastify__toast {
+  background: rgba(2, 6, 23, 0.4) !important;
+  /* Slate 950 base */
+  backdrop-filter: blur(60px) saturate(200%) brightness(110%) !important;
+  border-radius: 1.25rem !important;
+  padding: 14px 18px !important;
+  box-shadow:
+    0 20px 35px -10px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Inner text container override */
+html body .Toastify__toast-body {
+  background: transparent !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  letter-spacing: 0.015em !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Close icon override */
+html body .Toastify__close-button {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+html body .Toastify__close-button:hover {
+  color: #ea580c !important;
+}
+
+/* ---------------------------------------------------------
+   SUCCESS & INFO TOASTS (Pizza Palace Fiery Orange Glow)
+   --------------------------------------------------------- */
+html body .Toastify__toast--success,
+html body .Toastify__toast--info,
+html body .Toastify__toast--default {
+
+  box-shadow:
+    0 20px 35px -10px rgba(0, 0, 0, 0.85),
+    inset 0 0 20px rgba(5, 7, 34, 0.607),
+    0 0 25px rgba(12, 93, 234, 0.3) !important;
+}
+
+html body .Toastify__progress-bar--success,
+html body .Toastify__progress-bar--info,
+html body .Toastify__progress-bar--default {
+  background: linear-gradient(90deg, #ea580c, #f97316) !important;
+  height: 3px !important;
+  border-radius: 9999px !important;
+}
+
+html body .Toastify__toast--success .Toastify__toast-icon svg,
+html body .Toastify__toast--info .Toastify__toast-icon svg {
+  fill: #ea580c !important;
+  filter: drop-shadow(0 0 8px rgba(234, 88, 12, 0.9)) !important;
+}
+
+/* ---------------------------------------------------------
+   ERROR TOAST (Crimson Red Glow)
+   --------------------------------------------------------- */
+html body .Toastify__toast--error {
+  border: 1px solid rgba(239, 68, 68, 0.5) !important;
+  box-shadow:
+    0 20px 35px -10px rgba(0, 0, 0, 0.85),
+    inset 0 0 20px rgba(239, 68, 68, 0.2),
+    0 0 25px rgba(239, 68, 68, 0.3) !important;
+}
+
+html body .Toastify__progress-bar--error {
+  background: linear-gradient(90deg, #ef4444, #f87171) !important;
+  height: 3px !important;
+  border-radius: 9999px !important;
+}
+
+html body .Toastify__toast--error .Toastify__toast-icon svg {
+  fill: #f87171 !important;
+  filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.9)) !important;
+}
