@@ -105,7 +105,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
-    const clearCart = () => setCart([]);
+    const clearCart = () => {
+        const res = axios.get(``, {
+
+        })
+
+    }
 
     const getCartTotal = (): number => {
         if (!cart || !Array.isArray(cart)) return 0;

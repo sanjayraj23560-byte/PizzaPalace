@@ -101,4 +101,12 @@ router.post('/add', async (req, res) => {
     }
 });
 
+router.get('/clear-cart',( req,res)=>{
+    try {
+        const req = req.body.
+    } catch (error) {
+        console.log(error)
+    }
+})
+
 export default router

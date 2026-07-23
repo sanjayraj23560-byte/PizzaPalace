@@ -116,12 +116,15 @@ const Cart: React.FC = () => {
       handler: async (response: RazorpayOrderResponse) => {
         try {
           console.log("Initing payment !")
-          await axios.post(`http://localhost:4000/api/orderpayment/verify-sign`, {
+          const res = await axios.post(`http://localhost:4000/api/orderpayment/verify-sign`, {
             response,
           });
-          clearCart();
           setShowAddressModal(false);
           setStep("address");
+          if (res.status === 200 || res.data === true) {
+            toast.success("Payment Done...!")
+            clearCart()
+          }
           // razorpay.open();
         } catch (err) {
           console.error("Order Error:", err);
