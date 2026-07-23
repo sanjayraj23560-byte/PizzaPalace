@@ -60,7 +60,7 @@ const Cart: React.FC = () => {
   const [Order, setOrder] = useState<RazorpayOrderResponse[]>([])
   const user = auth.currentUser;
   const userId = auth.currentUser?.uid;
-
+  const router = useRouter()
   const removeItemFromCart = (item: any) => {
     reload
     removeFromCart(item)
@@ -124,6 +124,7 @@ const Cart: React.FC = () => {
           if (res.status === 200 || res.data === true) {
             toast.success("Payment Done...!")
             clearCart()
+            router.push('/order')
           }
           // razorpay.open();
         } catch (err) {

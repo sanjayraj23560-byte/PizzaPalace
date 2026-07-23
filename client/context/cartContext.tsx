@@ -106,10 +106,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const clearCart = () => {
-        const res = axios.get(``, {
-
+        const res = axios.post(`http://localhost:4000/api/cart/clear`, {
+            userID: "Hey there",
+            user:user?.uid
         })
-
+        console.log(res)
     }
 
     const getCartTotal = (): number => {

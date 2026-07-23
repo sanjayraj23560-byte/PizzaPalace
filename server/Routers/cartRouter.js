@@ -101,9 +101,19 @@ router.post('/add', async (req, res) => {
     }
 });
 
-router.get('/clear-cart',( req,res)=>{
+router.post('/clear', async (req, res) => {
     try {
-        const req = req.body.
+        const { user } = req.body
+        const clearCart = await cartModel.deleteOne({
+            userId:user
+        })
+        if (!clearCart) {
+            console.log("Not cleard")
+            return;
+        }
+        else{
+            res.status(200).send(true)
+        }
     } catch (error) {
         console.log(error)
     }
