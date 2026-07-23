@@ -57,7 +57,7 @@ const Cart: React.FC = () => {
   });
   const [placing, setPlacing] = useState<boolean>(false);
   const [step, setStep] = useState<string>("address");
-
+  const [Order, setOrder] = useState<RazorpayOrderResponse[]>([])
   const user = auth.currentUser;
   const userId = auth.currentUser?.uid;
 
@@ -92,13 +92,13 @@ const Cart: React.FC = () => {
       const res = await axios.post(`http://localhost:4000/api/orderPayment/create-order`, {
         amount: getCartTotal()
       });
-      console.log(res)
       if (res.status === 400) {
         alert("Payment initialization failed! Please try again.");
         setPlacing(false);
+        setOrder(res.data.order)
         return;
       }
-      initilizePayment(res.data)
+      initilizePayment(res.data.order)
     } catch (err) {
       console.error("Payment init error:", err);
       setPlacing(false);
@@ -106,13 +106,14 @@ const Cart: React.FC = () => {
   };
 
   const initilizePayment = (order: RazorpayOrderResponse) => {
+    console.log("This ->", order)
     const options = {
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       amount: order.amount,
       currency: order.currency,
       description: "order!",
       order_id: order.id,
-      handler: async (response: RazorpayOrderResponse ) => {
+      handler: async (response: RazorpayOrderResponse) => {
         try {
           console.log("Initing payment !")
           await axios.post(`http://localhost:4000/api/orderpayment/verify-sign`, {

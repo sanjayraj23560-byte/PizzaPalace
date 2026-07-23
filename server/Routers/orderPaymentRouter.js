@@ -1,5 +1,6 @@
 import express, { Router } from 'express';
 import Razorpay from 'razorpay';
+import crypto from 'crypto'
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -27,8 +28,18 @@ router.post('/create-order', async (req, res) => {
 
 router.post('/verify-sign', async (req, res) => {
     try {
-        // const { cart, total, username, userId, paymentId } = req.body
-        console.log(req.body)
+        const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = req.body
+        const expectedSignature = crypto
+            .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+            .update(razorpay_order_id + '|' + razorpay_payment_id)
+            .digest('hex');
+
+        if (expectedSignature === razorpay_signature) {
+            console.log("Verification Done ...!")
+        }
+        else{
+            console.log("Not verify...!")
+        }
         res.send("Signature verification !")
     } catch (error) {
         console.log(error)
@@ -36,3 +47,9 @@ router.post('/verify-sign', async (req, res) => {
 })
 
 export default router;
+
+//   response: {
+//     razorpay_payment_id   : 'pay_TGuV72UVubB5dF',
+//     razorpay_order_id    : 'order_TGuUxNLyLIK7yy',
+//     razorpay_signature   : 'ddd7ce86c463ed0728cb8cfb320646ee36aba4bce0893a80ed796886e2ae16fc'
+//   }
