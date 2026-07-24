@@ -5,7 +5,7 @@ import React, { useContext, useState } from "react";
 import { useRouter } from 'next/navigation';
 import { onAuthStateChanged, User } from 'firebase/auth'
 import axios from 'axios';
-import { FaBagShopping, FaBoxesPacking, FaPizzaSlice, FaBowlFood } from 'react-icons/fa6';
+import { FaBagShopping, FaBoxesPacking,Fa42Group , FaPizzaSlice, FaBowlFood } from 'react-icons/fa6';
 import { PackageX, Loader2, ShoppingBag } from 'lucide-react'; // Optional icons (npm i lucide-react)
 
 import { CartContext } from "../../context/cartContext";
