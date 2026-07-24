@@ -106,7 +106,6 @@ const Cart: React.FC = () => {
   };
 
   const initilizePayment = (order: RazorpayOrderResponse) => {
-    console.log("This ->", order)
     const options = {
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       amount: order.amount,
@@ -121,12 +120,14 @@ const Cart: React.FC = () => {
           });
           setShowAddressModal(false);
           setStep("address");
+          // 1111!!!!11!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           if (res.status === 200 || res.data === true) {
             toast.success("Payment Done...!")
             const OnOrder = async () => {
+              console.log("Orders save !")
               const res = await axios.post(`http://localhost:4000/api/order/getOrder`, {
-                cart
-              })
+                cart: cart,
+              });
               if (res.status === 200) {
                 clearCart()
                 setTimeout(() => {
@@ -136,7 +137,6 @@ const Cart: React.FC = () => {
               }
             }
             OnOrder()
-
           }
           // razorpay.open();
         } catch (err) {

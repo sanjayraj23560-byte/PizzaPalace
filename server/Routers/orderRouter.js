@@ -5,16 +5,20 @@ const router = Router();
 
 router.post('/getOrder', async (req, res) => {
     try {
-
-        res.send("Hey re")
-        const data = req.body
-        const orderData = await new orderModel({
-            cart: data
-        })
-
-        console.log(data)
+        const order = new orderModel(req.body);
+        await order.save()
+        res.status(200).send(true)
     } catch (error) {
+        console.log(error)
+    }
+})
 
+router.post('/showOrders', async (req, res) => {
+    try {
+        console.log(req.body)
+        console.log("Heuuuuuuuuuuuuuuuurrrrrrrrrrr")
+    } catch (error) {
+        console.log(error)
     }
 })
 
