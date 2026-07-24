@@ -6,8 +6,10 @@ const router = Router();
 router.post('/getOrder', async (req, res) => {
     try {
         const order = new orderModel(req.body);
-        await order.save()
-        res.status(200).send(true)
+        // console.log(req.body)
+        const afterOrder = await order.save()
+        res.status(200).send(order)
+        console.log(afterOrder)
     } catch (error) {
         console.log(error)
     }
@@ -15,8 +17,12 @@ router.post('/getOrder', async (req, res) => {
 
 router.post('/showOrders', async (req, res) => {
     try {
-        console.log(req.body)
-        console.log("Heuuuuuuuuuuuuuuuurrrrrrrrrrr")
+        const userID = req.body
+        console.log(userID)
+        const fetchOrders = await orderModel.findOne({
+            name: userID
+        })
+        console.log("This ->!", fetchOrders)
     } catch (error) {
         console.log(error)
     }

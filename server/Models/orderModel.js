@@ -10,7 +10,11 @@ const orderSchema = new mongoose.Schema({
             img: String,
             _id: String,
         }
-    ]
+    ],
+    userID: {
+        type: String,
+        required: true
+    }
 });
 
 const orderModel = new mongoose.model("orders", orderSchema);
