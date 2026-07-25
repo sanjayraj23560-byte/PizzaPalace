@@ -21,12 +21,14 @@ router.post('/showOrders', async (req, res) => {
         const fetchOrders = await orderModel.findOne({
             userID: userID
         })
-        console.log("This ->!", fetchOrders)
-        if (!fetchOrders) {
-            res.status(201).send("No orders !...")
+        const touchOrders = false
+        if (fetchOrders == null) {
+            await res.status(200).json({ touchOrders })
         }
-        else {
-            res.status(200).json({ fetchOrders })
+        if (fetchOrders) {
+
+            await res.status(200).json({ fetchOrders })
+
         }
     } catch (error) {
         console.log(error)
