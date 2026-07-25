@@ -3,12 +3,14 @@ import pizzaRet from './pizzaRouter.js';
 import user from './userRouter.js';
 import drinksOpt from './drinkRouter.js';
 import cart from './cartRouter.js';
+import chatBot from './chatBotRouter.js'
 import OnOrder from './orderRouter.js';
 import orderPayment from './orderPaymentRouter.js';
 
 const router = Router();
 
 router.use('/cart', cart);
+router.use('/chatbot',chatBot)
 router.use('/order',OnOrder);
 router.use('/orderpayment', orderPayment);
 router.use('/getdrinks', drinksOpt);

@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify'
 import "./globals.css";
 import { CartContext } from "@/context/cartContext";
 import Script from "next/script";
+import AskMe from '../components/askMe'
 import Footer from "../components/footer";
 import { CartProvider } from "@/context/cartContext";
 import Navbar from "../components/navbar";
@@ -40,11 +41,13 @@ export default function RootLayout({
           <div className="mt-18"> {children} </div>
           <ToastContainer
             position="top-right"
-            className="z-[9999] mt-16"
+            className="z-9999 mt-16"
             autoClose={2000}
             theme="dark"
           />
+
         </CartProvider >
+        <AskMe />
         <Footer />
 
       </body>
