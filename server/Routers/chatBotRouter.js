@@ -1,50 +1,48 @@
-import express from 'express';
-import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
+import { Router } from 'express';
+import Groq from 'groq-sdk';
 
 dotenv.config();
 
-const router = express.Router();
+const groq = new Groq({
+    apiKey: process.env.GROQ_API_KEY,
+});
 
-// Initialize the Google Gen AI client with your key
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const router = Router();
 
 router.post('/', async (req, res) => {
     try {
         const { messages } = req.body;
 
-        if (!messages || !Array.isArray(messages)) {
-            return res.status(400).json({ error: 'Messages array is required' });
-        }
+        // 1. Keep history concise (last 6 messages)
+        const recentMessages = messages.slice(-6);
 
-        // Convert client chat history format ({ role, content }) to Gemini format
-        const contents = messages.map((m) => ({
-            role: m.role === 'assistant' ? 'model' : 'user',
-            parts: [{ text: m.content }],
-        }));
-
-        // Call the gemini-1.5-flash model
-        const response = await ai.models.generateContent({
-            model: 'gemini-2.0-flash-lite',
-            contents: contents,
-            config: {
-                systemInstruction:
-                    'You are Pizza Palace AI, a friendly assistant for Pizza Palace restaurant. Help users pick pizzas, drinks, and track their food orders.',
+        // 2. Format messages into Groq's expected OpenAI-style format
+        const formattedMessages = [
+            {
+                role: 'system',
+                content: 'You are pizzapalace AI, a helpful, enthusiastic pizza ordering assistant. Keep responses short, friendly, and focused on helping customers choose or order pizzas talk like gen-z , your name is Lisa , respond with thug.(dont write code )'
             },
+            ...recentMessages.map(m => ({
+                role: m.role === 'model' || m.role === 'assistant' ? 'assistant' : 'user',
+                content: m.content
+            }))
+        ];
+
+        // 3. Generate response using Llama 3.3 70B
+        const completion = await groq.chat.completions.create({
+            model: 'llama-3.3-70b-versatile',
+            messages: formattedMessages,
+            max_tokens: 250,
+            temperature: 0.7,
         });
-        // Send the response back to your React frontend
-        res.json({ reply: response.text });
+
+        const reply = completion.choices[0]?.message?.content || "Sorry, I couldn't process your pizza order right now.";
+
+        res.json({ reply });
     } catch (error) {
-        console.error('Gemini API Error:', error);
-
-        // Graceful error handling for Rate Limits (429)
-        if (error.status === 429) {
-            return res.json({
-                reply: "I'm taking a 12 Hour pizza break! Please try asking again in a few hours. 🍕",
-            });
-        }
-
-        res.status(500).json({ error: 'Failed to fetch AI response' });
+        console.error('Groq API Error:', error);
+        res.status(500).json({ error: 'AI Error' });
     }
 });
 
