@@ -6,7 +6,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
-export default function Login() {
+export default function SignUp() {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const navi = useRouter();
@@ -27,10 +27,42 @@ export default function Login() {
         }
     };
 
-    const signInWithEmailAndPassword = () => {
+    const handleEmailLogin = async (e: React.FormEvent) => {
+        e.preventDefault(); // Prevents full page reload on submit
+        if (!name || !password) {
+            toast.error("Please enter both email and password.");
+            return;
+        }
+        try {
+            // Pass auth, email, and password into Firebase's function
+            const userCredential = await signInWithEmailAndPassword(auth, name, password);
+            const user = userCredential.user;
 
-    }
+            toast.success(`Logged in as ${user.email}`);
+            navi.push('/');
+        } catch (error: any) {
+            console.error("Email Login Error:", error);
 
+            // Detailed Firebase Error Messages
+            switch (error.code) {
+                case 'auth/invalid-credential':
+                case 'auth/user-not-found':
+                case 'auth/wrong-password':
+                    toast.error("Invalid email or password.");
+                    break;
+                case 'auth/invalid-email':
+                    toast.error("Please enter a valid email address.");
+                    break;
+                case 'auth/too-many-requests':
+                    toast.error("Too many failed attempts. Try again later.");
+                    break;
+                default:
+                    toast.error("Login failed. Check your details.");
+                    break;
+            }
+        } finally {
+        }
+    };
     return (
         <div className="flex justify-center items-center min-height-screen min-h-screen w-full bg-black font-sans px-4">
 
@@ -78,7 +110,7 @@ export default function Login() {
                     </div>
 
                     {/* Standard Login Button - Matches the hover orange feature design */}
-                    <button onClick={signInWithEmailAndPassword} className="w-full mt-2 py-2.5 bg-orange-500/10 text-orange-500 border border-orange-500/20 rounded-xl text-sm font-semibold tracking-wide hover:bg-orange-500 hover:text-black transition-all duration-200 active:scale-[0.98]">
+                    <button onClick={handleEmailLogin} className="w-full mt-2 py-2.5 bg-orange-500/10 text-orange-500 border border-orange-500/20 rounded-xl text-sm font-semibold tracking-wide hover:bg-orange-500 hover:text-black transition-all duration-200 active:scale-[0.98]">
                         Sign up
                     </button>
                 </div>

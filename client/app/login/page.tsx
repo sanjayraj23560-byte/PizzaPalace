@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { auth, googleProvider  } from '../../components/firebase';
+import { auth, googleProvider } from '../../components/firebase';
 import { signInWithPopup } from 'firebase/auth';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
@@ -21,6 +21,30 @@ export default function Login() {
       }
       // Clean string interpolation spacing for toast alert
       toast.success(`Welcome back, ${user.displayName || 'Palace Guest'}!`);
+    } catch (error) {
+      console.error("Auth error:", error);
+      toast.error("Authentication failed. Please try again.");
+    }
+  };
+
+  const handleLogin = async () => {
+
+    if (name.trim() === '' && password.trim() === '') {
+      toast.info("Fill the fields")
+      return;
+    }
+    try {
+
+      const user = await signInWithEmailAndPassword(auth, name, password)
+      if (user) {
+        navi.push('/')
+      }
+      if(!user)
+      {
+        toast.error("User not found")
+      }
+      // Clean string interpolation spacing for toast alert
+      toast.success(`Welcome back, ${name || 'Palace Guest'}!`);
     } catch (error) {
       console.error("Auth error:", error);
       toast.error("Authentication failed. Please try again.");
@@ -74,11 +98,11 @@ export default function Login() {
           </div>
 
           {/* Standard Login Button - Matches the hover orange feature design */}
-          <button className="w-full mt-2 py-2.5 bg-orange-500/10 text-orange-500 border border-orange-500/20 rounded-xl text-sm font-semibold tracking-wide hover:bg-orange-500 hover:text-black transition-all duration-200 active:scale-[0.98]">
+          <button onClick={handleLogin} className="w-full mt-2 py-2.5 bg-orange-500/10 text-orange-500 border border-orange-500/20 rounded-xl text-sm font-semibold tracking-wide hover:bg-orange-500 hover:text-black transition-all duration-200 active:scale-[0.98]">
             Sign in
           </button>
         </div>
-        <p className='p-2 hover:cursor-pointer' onClick={()=>navi.push('/signup')}>No account ?<span className='text-amber-700'> sign up</span></p>
+        <p className='p-2 hover:cursor-pointer' onClick={() => navi.push('/signup')}>No account ?<span className='text-amber-700'> sign up</span></p>
         {/* Visual Content Divider */}
         <div className="flex items-center text-center my-5 text-[10px] uppercase font-bold tracking-widest text-gray-600">
           <div className="flex-1 border-b border-amber-950/20"></div>
@@ -99,7 +123,6 @@ export default function Login() {
           </svg>
           Continue with Google
         </button>
-
       </div>
     </div>
   );
