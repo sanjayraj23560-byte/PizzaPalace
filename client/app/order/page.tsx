@@ -5,13 +5,18 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import axios from 'axios';
-import { FaBagShopping, FaPizzaSlice, FaBowlFood } from 'react-icons/fa6';
+import { FaBagShopping, FaPizzaSlice, FaBowlFood, FaHandDots } from 'react-icons/fa6';
+import { FaArrowDownWideShort } from 'react-icons/fa6';
+import { LeafyGreenIcon, DotIcon } from 'lucide-react';
+import { LoaderPinwheelIcon } from 'lucide-react';
 import { CartContext } from '../../context/cartContext';
 
 export default function Orders() {
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
     const [orders, setOrders] = useState<any[]>([]);
+    const [drop, setDrop] = useState(false)
+    const [orderStatus, setOrderStatus] = useState<any[]>([])
     const [noOrders, setNoOrders] = useState(false);
     const [loading, setLoading] = useState(true);
 
@@ -29,6 +34,14 @@ export default function Orders() {
         return () => unsubscribe();
     }, [router]);
 
+    const showItem = (id: any) => {
+
+        const order = orders.find(item => item._id === id);
+
+        console.log(order);
+
+    }
+
     // 2. Fetch Orders when `user` is confirmed
     useEffect(() => {
         if (!user) return; // Wait until Firebase resolves user
@@ -39,15 +52,7 @@ export default function Orders() {
                 const res = await axios.post('http://localhost:4000/api/order/showOrders', {
                     user: user.uid,
                 });
-
-                // Adjust properties depending on your API payload structure
-                if (res.data.orders && res.data.orders.length > 0) {
-                    setOrders(res.data.orders);
-                    setNoOrders(false);
-                } else {
-                    setOrders([]);
-                    setNoOrders(true);
-                }
+                setOrders([...res.data.fetchOrders])
             } catch (err) {
                 console.error('Error fetching orders:', err);
                 setNoOrders(true);
@@ -75,10 +80,12 @@ export default function Orders() {
         <div className="min-h-screen bg-slate-950  items-center justify-center mt-10 text-slate-100 p-4 md:p-8 selection:bg-orange-500 selection:text-white">
             {/* Header */}
             <div className="max-w-5xl mx-auto mb-8 flex items-center justify-between border-b border-slate-800 pb-4">
-                <h1 className="text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-linear-to-r from-orange-400 via-orange-500 to-amber-500 flex items-center gap-3">
+                <h2 className="text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-linear-to-r from-orange-400 via-orange-500 to-amber-500 flex items-center gap-3">
                     <FaBagShopping className="w-8 h-8 text-orange-500" />
                     Your Orders
-                </h1>
+
+                </h2>
+                <LoaderPinwheelIcon className='text-orange-600 animate-spin' />
             </div>
 
             <div className="max-w-5xl mx-auto space-y-6">
@@ -115,30 +122,51 @@ export default function Orders() {
 
                 {/* ORDERS LIST STATE */}
                 {!loading && !noOrders && orders.length > 0 && (
-                    <div className="grid gap-4">
-                        {orders.map((order: any, idx: number) => (
+                    <div className="grid gap-4 ">
+                        {orders.map((order, idx) => (
                             <div
-                                key={order._id || idx}
-                                className="p-5 rounded-2xl bg-slate-900 border border-slate-800 hover:border-orange-500/40 transition-colors duration-200"
-                            >
-                                <div className="flex items-center gap-4">
-                                    {order.img && (
-                                        <img
-                                            src={order.img}
-                                            alt={order.name || 'Order Item'}
-                                            className="w-16 h-16 object-cover rounded-xl border border-slate-800"
-                                        />
-                                    )}
+                                key={order._id}
+                                className="bg-slate-900 rounded-xl p-5 border border-slate-700">
+
+                                <div className='flex justify-between'>
                                     <div>
-                                        <h3 className="text-lg font-bold text-slate-100">
-                                            {order.name || `Order #${idx + 1}`}
-                                        </h3>
-                                        <p className="text-slate-400 text-sm">{order.desc || ''}</p>
-                                        {order.price && (
-                                            <p className="text-orange-500 font-semibold mt-1">₹{order.price}</p>
-                                        )}
+                                        <h3>Order ID :{order._id}</h3>
+                                    </div>
+
+                                    <div>
+                                        <button onClick={() => showItem(order._id)}><FaArrowDownWideShort /></button>
                                     </div>
                                 </div>
+
+                                {
+                                    drop && order.cart.map((item: any) => (
+                                        <div
+                                            key={item._id}
+                                            className="flex justify-between items-center border-b border-slate-800 py-4"
+                                        >
+
+                                            <div className="flex gap-4">
+
+                                                <img
+                                                    src={item.img}
+                                                    className="w-20 h-20 rounded-lg"
+                                                />
+
+                                                <div>
+                                                    <h3>{item.name}</h3>
+                                                    <p>{item.desc}</p>
+                                                    <p>₹{item.price}</p>
+                                                </div>
+
+                                            </div>
+
+                                            <div className="text-orange-500">
+                                                {item.status}
+                                            </div>
+
+                                        </div>
+                                    ))
+                                }
                             </div>
                         ))}
                     </div>

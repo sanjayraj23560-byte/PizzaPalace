@@ -18,10 +18,12 @@ router.post('/getOrder', async (req, res) => {
 router.post('/showOrders', async (req, res) => {
     try {
         const userID = req.body.user
-        const fetchOrders = await orderModel.findOne({
+        const fetchOrders = await orderModel.find({
             userID: userID
         })
-        const touchOrders = false
+        const touchOrders = {
+            message: "No orders yet", 
+        }
         if (fetchOrders == null) {
             await res.status(200).json({ touchOrders })
         }

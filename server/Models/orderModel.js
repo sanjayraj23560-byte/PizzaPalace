@@ -9,8 +9,13 @@ const orderSchema = new mongoose.Schema({
             quantity: Number,
             img: String,
             _id: String,
+            status: {
+                type: String,
+                default: "Preparing"
+            }
         }
     ],
+
     userID: {
         type: String,
         required: true

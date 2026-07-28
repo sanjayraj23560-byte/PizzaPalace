@@ -21,7 +21,6 @@ interface MenuItem {
 // 2. Pass imported icon component references directly (without quotes!)
 const menuItems: MenuItem[] = [
     { label: "My Orders", icon: ListOrdered, path: "/order", color: "#ff6464", desc: "Track & reorder" },
-    { label: "Wishlist", icon: Heart, path: "/wishlist", color: "#ff6b8a", desc: "Saved favourites" },
     { label: "Coupons", icon: Ticket, path: "/coupons", color: "#ffc850", desc: "Deals & offers" },
     { label: "Membership", icon: Crown, path: "/member", color: "#f5c842", desc: "Your tier & perks" },
     { label: "Help", icon: FaHeadset, path: "/help", color: "#50b4ff", desc: "Support & FAQs" },
