@@ -15,7 +15,7 @@ export default function Orders() {
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
     const [orders, setOrders] = useState<any[]>([]);
-    const [drop, setDrop] = useState(false)
+    const [drop, setDrop] = useState<String | null>(null);
     const [orderStatus, setOrderStatus] = useState<any[]>([])
     const [noOrders, setNoOrders] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -34,13 +34,13 @@ export default function Orders() {
         return () => unsubscribe();
     }, [router]);
 
-    const showItem = (id: any) => {
-
-        const order = orders.find(item => item._id === id);
-
-        console.log(order);
-
-    }
+    const showItem = (id: string) => {
+        if (drop === id) {
+            setDrop(null);      // close it
+        } else {
+            setDrop(id);        // open it
+        }
+    };
 
     // 2. Fetch Orders when `user` is confirmed
     useEffect(() => {
@@ -52,6 +52,7 @@ export default function Orders() {
                 const res = await axios.post('http://localhost:4000/api/order/showOrders', {
                     user: user.uid,
                 });
+                console.log(res.data)
                 setOrders([...res.data.fetchOrders])
             } catch (err) {
                 console.error('Error fetching orders:', err);
@@ -85,7 +86,7 @@ export default function Orders() {
                     Your Orders
 
                 </h2>
-                <LoaderPinwheelIcon className='text-orange-600 animate-spin' />
+                <LoaderPinwheelIcon className='text-violet-500 animate-spin' />
             </div>
 
             <div className="max-w-5xl mx-auto space-y-6">
@@ -130,42 +131,47 @@ export default function Orders() {
 
                                 <div className='flex justify-between'>
                                     <div>
-                                        <h3>Order ID :{order._id}</h3>
+                                        <p className='text-[10px] text-green-700'>Order ID :{order._id}</p>
+                                        <h3 className='flex'>Order ID : <p className='text-amber-700'>{idx + 1}</p> </h3>
                                     </div>
-
+                                    <div>
+                                        <h1 className='text-[10px] animate-pulse text-green-300'>{ 
+                                            order.status
+                                        }</h1>
+                                    </div>
+                                    <h1>{
+                                        order.time}</h1>
                                     <div>
                                         <button onClick={() => showItem(order._id)}><FaArrowDownWideShort /></button>
                                     </div>
                                 </div>
 
                                 {
-                                    drop && order.cart.map((item: any) => (
-                                        <div
-                                            key={item._id}
-                                            className="flex justify-between items-center border-b border-slate-800 py-4"
-                                        >
+                                    drop === order._id && (
+                                        order.cart.map((item: any) => (
+                                            <div
+                                                key={item._id}
+                                                className="flex justify-between items-center border-b border-slate-800 py-4"
+                                            >
+                                                <div className="flex gap-4">
+                                                    <img
+                                                        src={item.img}
+                                                        className="w-20 h-20 rounded-lg"
+                                                    />
 
-                                            <div className="flex gap-4">
-
-                                                <img
-                                                    src={item.img}
-                                                    className="w-20 h-20 rounded-lg"
-                                                />
-
-                                                <div>
-                                                    <h3>{item.name}</h3>
-                                                    <p>{item.desc}</p>
-                                                    <p>₹{item.price}</p>
+                                                    <div>
+                                                        <h3>{item.name}</h3>
+                                                        <p>{item.desc}</p>
+                                                        <p>₹{item.price}</p>
+                                                    </div>
                                                 </div>
 
+                                                <div className="text-orange-500">
+                                                    {item.status}
+                                                </div>
                                             </div>
-
-                                            <div className="text-orange-500">
-                                                {item.status}
-                                            </div>
-
-                                        </div>
-                                    ))
+                                        ))
+                                    )
                                 }
                             </div>
                         ))}

@@ -9,17 +9,23 @@ const orderSchema = new mongoose.Schema({
             quantity: Number,
             img: String,
             _id: String,
-            status: {
-                type: String,
-                default: "Preparing"
-            }
-        }
+        },
+
     ],
 
-    userID: {
+    status: {
         type: String,
-        required: true
-    }
+        default: "Preparing",
+    },
+
+    time: {
+        default:Date.now(),
+        type:String
+    },
+    userID: {
+    type: String,
+    required: true
+}
 });
 
 const orderModel = new mongoose.model("orders", orderSchema);
