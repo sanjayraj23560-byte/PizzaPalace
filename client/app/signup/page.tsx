@@ -2,13 +2,10 @@
 import React, { useState } from 'react';
 import { auth, googleProvider } from '../../components/firebase';
 import { signInWithPopup } from 'firebase/auth';
-import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
 export default function SignUp() {
-    const [name, setName] = useState('');
-    const [password, setPassword] = useState('');
     const navi = useRouter();
     // Fixed the naming collision here from 'Login' to 'handleGoogleLogin'
     const handleGoogleLogin = async () => {
@@ -27,42 +24,6 @@ export default function SignUp() {
         }
     };
 
-    const handleEmailLogin = async (e: React.FormEvent) => {
-        e.preventDefault(); // Prevents full page reload on submit
-        if (!name || !password) {
-            toast.error("Please enter both email and password.");
-            return;
-        }
-        try {
-            // Pass auth, email, and password into Firebase's function
-            const userCredential = await signInWithEmailAndPassword(auth, name, password);
-            const user = userCredential.user;
-
-            toast.success(`Logged in as ${user.email}`);
-            navi.push('/');
-        } catch (error: any) {
-            console.error("Email Login Error:", error);
-
-            // Detailed Firebase Error Messages
-            switch (error.code) {
-                case 'auth/invalid-credential':
-                case 'auth/user-not-found':
-                case 'auth/wrong-password':
-                    toast.error("Invalid email or password.");
-                    break;
-                case 'auth/invalid-email':
-                    toast.error("Please enter a valid email address.");
-                    break;
-                case 'auth/too-many-requests':
-                    toast.error("Too many failed attempts. Try again later.");
-                    break;
-                default:
-                    toast.error("Login failed. Check your details.");
-                    break;
-            }
-        } finally {
-        }
-    };
     return (
         <div className="flex justify-center items-center min-height-screen min-h-screen w-full bg-black font-sans px-4">
 
@@ -77,48 +38,11 @@ export default function SignUp() {
                         Sign in to access your custom gourmet formulations and live GPS tracking.
                     </p>
                 </div>
-
-                {/* Credentials Form Layout */}
-                <div className="space-y-4">
-
-                    {/* Username Input Container */}
-                    <div className="flex flex-col space-y-1.5">
-                        <label className="text-xs font-semibold uppercase tracking-wider text-white">
-                            Username
-                        </label>
-                        <input
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            type="text"
-                            placeholder="Enter your username"
-                            className="w-full px-4 py-2.5 rounded-xl bg-black border border-amber-950/30 text-white text-sm placeholder-gray-600 outline-none transition-all duration-200 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/10"
-                        />
-                    </div>
-
-                    {/* Password Input Container */}
-                    <div className="flex flex-col space-y-1.5">
-                        <label className="text-xs font-semibold uppercase tracking-wider text-white">
-                            Password
-                        </label>
-                        <input
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            type="password"
-                            placeholder="••••••••"
-                            className="w-full px-4 py-2.5 rounded-xl bg-black border border-amber-950/30 text-white text-sm placeholder-gray-600 outline-none transition-all duration-200 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/10"
-                        />
-                    </div>
-
-                    {/* Standard Login Button - Matches the hover orange feature design */}
-                    <button onClick={handleEmailLogin} className="w-full mt-2 py-2.5 bg-orange-500/10 text-orange-500 border border-orange-500/20 rounded-xl text-sm font-semibold tracking-wide hover:bg-orange-500 hover:text-black transition-all duration-200 active:scale-[0.98]">
-                        Sign up
-                    </button>
-                </div>
                 <p className='p-2 hover:cursor-pointer' onClick={() => navi.push('/login')}>Already have an account ?<span className='text-amber-700'> Log in</span></p>
                 {/* Visual Content Divider */}
                 <div className="flex items-center text-center my-5 text-[10px] uppercase font-bold tracking-widest text-gray-600">
                     <div className="flex-1 border-b border-amber-950/20"></div>
-                    <span className="px-3">OR Secure Gateway</span>
+                    <span className="px-3">Secure Gateway</span>
                     <div className="flex-1 border-b border-amber-950/20"></div>
                 </div>
 

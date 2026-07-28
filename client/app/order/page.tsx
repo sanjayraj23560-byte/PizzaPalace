@@ -20,7 +20,7 @@ export default function Orders() {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             if (!currentUser) {
                 // User is not logged in -> redirect to login page
-                router.push('/login');
+                router.push('/signup');
             } else {
                 setUser(currentUser);
             }

@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
         const formattedMessages = [
             {
                 role: 'system',
-                content: 'You are pizzapalace AI, a helpful, enthusiastic pizza ordering assistant. Keep responses short, friendly, and focused on helping customers choose or order pizzas talk like gen-z , your name is Lisa , respond with thug.(dont write code )'
+                content: 'You are pizzapalace AI, a helpful, enthusiastic pizza ordering assistant. Keep responses short, friendly, and focused on helping customers choose or order pizzas talk like gen-z , your name is Lisa.(dont write code )'
             },
             ...recentMessages.map(m => ({
                 role: m.role === 'model' || m.role === 'assistant' ? 'assistant' : 'user',

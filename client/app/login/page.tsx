@@ -70,43 +70,14 @@ export default function Login() {
         <div className="space-y-4">
 
           {/* Username Input Container */}
-          <div className="flex flex-col space-y-1.5">
-            <label className="text-xs font-semibold uppercase tracking-wider text-white">
-              Username
-            </label>
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              type="text"
-              placeholder="Enter your username"
-              className="w-full px-4 py-2.5 rounded-xl bg-black border border-amber-950/30 text-white text-sm placeholder-gray-600 outline-none transition-all duration-200 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/10"
-            />
-          </div>
-
-          {/* Password Input Container */}
-          <div className="flex flex-col space-y-1.5">
-            <label className="text-xs font-semibold uppercase tracking-wider text-white">
-              Password
-            </label>
-            <input
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              type="password"
-              placeholder="••••••••"
-              className="w-full px-4 py-2.5 rounded-xl bg-black border border-amber-950/30 text-white text-sm placeholder-gray-600 outline-none transition-all duration-200 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/10"
-            />
-          </div>
-
-          {/* Standard Login Button - Matches the hover orange feature design */}
-          <button onClick={handleLogin} className="w-full mt-2 py-2.5 bg-orange-500/10 text-orange-500 border border-orange-500/20 rounded-xl text-sm font-semibold tracking-wide hover:bg-orange-500 hover:text-black transition-all duration-200 active:scale-[0.98]">
-            Sign in
-          </button>
+        
+    
         </div>
         <p className='p-2 hover:cursor-pointer' onClick={() => navi.push('/signup')}>No account ?<span className='text-amber-700'> sign up</span></p>
         {/* Visual Content Divider */}
         <div className="flex items-center text-center my-5 text-[10px] uppercase font-bold tracking-widest text-gray-600">
           <div className="flex-1 border-b border-amber-950/20"></div>
-          <span className="px-3">OR Secure Gateway</span>
+          <span className="px-3">Secure Gateway</span>
           <div className="flex-1 border-b border-amber-950/20"></div>
         </div>
 
