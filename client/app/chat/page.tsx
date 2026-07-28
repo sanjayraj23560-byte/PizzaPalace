@@ -62,7 +62,7 @@ export default function ChatBox() {
     return (
         <div className="flex justify-center items-center w-full min-h-screen p-4 bg-slate-950">
             {/* Main Liquid Glass Container (Fixed size h-[550px] prevents jumping) */}
-            <div className="relative w-full max-w-md bg-violet-950/30 border border-violet-500/30 rounded-3xl shadow-[0_8px_32px_0_rgba(124,58,237,0.2)] backdrop-blur-2xl flex flex-col h-[550px] overflow-hidden">
+            <div className="relative w-full max-w-md bg-violet-950/30 border border-violet-500/30 rounded-3xl shadow-[0_8px_32px_0_rgba(124,58,237,0.2)] backdrop-blur-2xl flex flex-col h-137.5 overflow-hidden">
 
                 {/* Ambient Top Light Reflection */}
                 <div className="absolute -top-20 -left-20 w-48 h-48 bg-violet-500/15 rounded-full blur-3xl pointer-events-none" />
@@ -124,7 +124,7 @@ export default function ChatBox() {
                                 </div>
                                 <div
                                     className={`p-3.5 rounded-2xl max-w-[80%] text-sm leading-relaxed ${m.role === 'user'
-                                            ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-tr-none shadow-md border border-violet-400/30'
+                                            ? 'bg-linear-to-r from-violet-600 to-purple-600 text-white rounded-tr-none shadow-md border border-violet-400/30'
                                             : 'bg-violet-900/40 text-violet-100 rounded-tl-none border border-violet-500/30 backdrop-blur-md'
                                         }`}
                                 >
