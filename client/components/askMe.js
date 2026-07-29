@@ -8,10 +8,10 @@ export default function AskMe() {
     const router = useRouter();
 
     return (
-        <div className="fixed bottom-15 right-6 z-50">
+        <div className="fixed bottom-8 right-6 z-50">
             <button
                 onClick={() => router.push('/chat')}
-                className="group relative flex items-center gap-2.5 px-5 py-3 rounded-full bg-violet-950/40 border border-violet-500/30 text-violet-100 font-medium text-sm shadow-[0_8px_32px_0_rgba(124,58,237,0.25)] backdrop-blur-lg hover:bg-violet-900/50 hover:border-violet-400/60 hover:shadow-[0_8px_32px_0_rgba(139,92,246,0.45)] transition-all duration-300 hover:scale-105 active:scale-95 overflow-hidden"
+                className="group relative flex items-center gap-2.5 px-5 py-1.5 rounded-full bg-violet-950/40 border border-violet-500/30 text-violet-100 font-medium text-sm shadow-[0_8px_32px_0_rgba(124,58,237,0.25)] backdrop-blur-lg hover:bg-violet-900/50 hover:border-violet-400/60 hover:shadow-[0_8px_32px_0_rgba(139,92,246,0.45)] transition-all duration-300 hover:scale-105 active:scale-95 overflow-hidden"
             >
                 {/* Ambient Liquid Glass Reflection Light */}
                 <div className="absolute -top-12 -left-12 w-24 h-24 bg-violet-400/20 rounded-full blur-xl group-hover:bg-violet-300/30 transition-all duration-500 pointer-events-none" />

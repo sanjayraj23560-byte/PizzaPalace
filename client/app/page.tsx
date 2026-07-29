@@ -3,6 +3,11 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
+import { FaHand } from "react-icons/fa6";
+import { FaPizzaSlice } from "react-icons/fa6";
+import { FaCartPlus } from "react-icons/fa6";
+import { CupSodaIcon, CupSoda } from "lucide-react";
+import { FaFireFlameCurved } from "react-icons/fa6";
 import axios from "axios";
 import { useCart } from "@/context/cartContext";
 
@@ -95,8 +100,8 @@ const Home = () => {
         <span className="text-4xl font-black text-white tracking-tight">
           Pizz<span className="text-orange-500">A</span> Pala<span className="text-orange-600">c</span>e
         </span>
-        <p className="text-gray-500 text-sm mt-2">
-          Welcome back, <span className="text-amber-50 font-bold">{username}</span> 👋
+        <p className="text-gray-500 text-sm mt-2 flex gap-2 items-center">
+          Welcome back, <span className="text-amber-50 font-bold">{username}</span><FaFireFlameCurved className="animate-pulse text-red-500" />
         </p>
       </motion.div>
 
@@ -113,25 +118,36 @@ const Home = () => {
         </motion.div>
 
         {/* Quick Route Nav Buttons */}
-        <motion.div variants={fadeUp} className="w-full grid grid-cols-3 gap-3 mb-10">
-          <button
-            onClick={() => navigate.push('/pizza')}
-            className="bg-slate-950/70 border border-amber-950/20 hover:border-orange-500/30 text-amber-50 rounded-xl py-3 text-xs sm:text-sm font-bold transition cursor-pointer"
-          >
-            🍕 Pizzas
-          </button>
-          <button
-            onClick={() => navigate.push('/drinks')}
-            className="bg-slate-950/70 border border-amber-950/20 hover:border-orange-500/30 text-amber-50 rounded-xl py-3 text-xs sm:text-sm font-bold transition cursor-pointer"
-          >
-            🥤 Drinks
-          </button>
-          <button
-            onClick={() => navigate.push('/cart')}
-            className="bg-orange-500 text-black rounded-xl py-3 text-xs sm:text-sm font-black transition hover:bg-orange-600 cursor-pointer"
-          >
-            🛒 Checkout
-          </button>
+        <motion.div variants={fadeUp} className="w-full grid grid-cols-3 gap-3 mb-10 ">
+          <div className="flex items-center gap-5 flex-row justify-center bg-slate-950/70 border border-amber-950/20 hover:border-orange-500/30 text-amber-50 rounded-xl py-3 text-xs sm:text-sm font-bold transition cursor-pointer">
+            <FaPizzaSlice className="text-amber-700" />
+            <button
+              onClick={() => navigate.push('/pizza')}
+              className="bg-slate-950/70 border border-amber-950/20 text-amber-50 rounded-xl py-3 text-xs sm:text-sm font-bold transition cursor-pointer"
+            >
+              Pizzas
+            </button>
+          </div>
+
+          <div className="flex items-center gap-5 flex-row justify-center bg-slate-950/70 border border-amber-950/20 hover:border-orange-500/30 text-amber-50 rounded-xl py-3 text-xs sm:text-sm font-bold transition cursor-pointer">
+            <CupSoda className="text-blue-400" />
+            <button
+              onClick={() => navigate.push('/drinks')}
+              className="bg-slate-950/70 border border-amber-950/20 text-amber-50 rounded-xl py-2 text-xs sm:text-sm font-bold transition cursor-pointer"
+            >
+              Drinks
+            </button>
+          </div>
+
+          <div className="flex items-center gap-5 flex-row justify-center bg-slate-950/70 border border-amber-950/20 hover:border-orange-500/30 text-amber-50 rounded-xl py-3 text-xs sm:text-sm font-bold transition cursor-pointer">
+            <FaCartPlus className="text-green-500" />
+            <button
+              onClick={() => navigate.push('/cart')}
+              className="bg-slate-950/70 border border-amber-950/20 text-amber-50 rounded-xl py-2 text-xs sm:text-sm font-bold transition cursor-pointer"
+            >
+              Check Out
+            </button>
+          </div>
         </motion.div>
 
         {/* Featured Showcase Grid */}
@@ -166,9 +182,21 @@ const Home = () => {
                     className="w-20 h-20 rounded-xl object-cover shrink-0 border border-amber-950/10"
                   />
                   <div className="flex-1 min-w-0">
-                    <span className={`text-[10px] font-black tracking-wider uppercase ${f.type === "pizza" ? "text-orange-400" : "text-sky-400"
+                    <span className={`text-[10px] font-black tracking-wider uppercase ${f.type === "pizza" ? "text-amber-700" : "text-sky-400"
                       }`}>
-                      {f.type === "pizza" ? "🍕 Pizza" : "🥤 Drink"}
+                      {f.type === "pizza" ? (
+                        < >
+                          <div className="flex flex-row gap-2">
+                            <p>{" Pizza"}</p>< FaPizzaSlice size={14} />
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="flex flex-row gap-2">
+                            <p>{" Drink"}</p>< CupSoda size={15} />
+                          </div>
+                        </>
+                      )}
                     </span>
                     <h3 className="text-amber-50 text-sm sm:text-base font-bold truncate mt-0.5 mb-1">
                       {f.name}

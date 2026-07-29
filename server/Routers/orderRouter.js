@@ -9,7 +9,6 @@ router.post('/getOrder', async (req, res) => {
         // console.log(req.body)
         const afterOrder = await order.save()
         res.status(200).send(order)
-        console.log(afterOrder)
     } catch (error) {
         console.log(error)
     }

@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { auth } from "@/components/firebase";
-import { FaHeadset } from "react-icons/fa6";
+import { FaHeadset, FaUser } from "react-icons/fa6";
 import { Heart, Ticket, Crown, HelpCircle } from "lucide-react";
 import { ListOrdered } from "lucide-react";
 import { signOut, onAuthStateChanged, User } from "firebase/auth";
@@ -64,27 +64,38 @@ const Account = () => {
 
     return (
         <div className="page grain" style={{ padding: "24px 20px 130px", backgroundColor: "#000", minHeight: "100vh", color: "#9ca3af" }}>
-
+            {/* Brand Title Frame */}
             <motion.span
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.45, ease: "easeOut" }}
-                className="text-4xl font-bold text-white block mb-4"
+                transition={{
+                    duration: 0.7,
+                    delay: 0.45,
+                    ease: "easeOut",
+                }}
+                className="text-4xl font-black text-white tracking-tight block mb-6 text-center sm:text-left"
             >
-                Pizz<span style={{ color: "var(--orange, #ea580c)" }}>A</span> Pala
-                <span style={{ color: "var(--orange, #ea580c)" }}>C</span>
-                <span style={{ color: "var(--orange, #ea580c)" }}>e</span>
+                Pizz<span className="text-orange-500">A</span> Pala
+                <span className="text-orange-600">c</span>
+                <span className="text-orange-500">e</span>
             </motion.span>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
-                <button
-                    className="back-btn"
-                    onClick={() => navi.push('/home')}
-                    style={{ background: "#0f172a", border: "1px solid rgba(120,53,4,0.2)", padding: "6px 16px", borderRadius: "12px", color: "#fff", cursor: "pointer" }}
-                >
-                    ← Back
-                </button>
-                <h1 className="section-title text-xl font-bold text-white">My <span style={{ color: "#ea580c" }}>Account</span></h1>
+            {/* Header Context Action Bar matching Drinks page pattern */}
+            <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 text-center sm:text-left">
+                <div className="flex flex-col sm:flex-row items-center gap-4">
+                    <button
+                        className="bg-amber-600 text-black px-5 py-2.5 rounded-2xl text-sm font-bold border-0 cursor-pointer hover:bg-orange-600 transition"
+                        onClick={() => navi.push('/')}
+                    >
+                        ← Back
+                    </button>
+                    <div>
+                        <h1 className="text-[clamp(1.5rem,3vw,2.2rem)] text-amber-50 font-extrabold tracking-wide leading-none mb-1">
+                             <span className="text-orange-500">Account</span>
+                        </h1>
+                        <p className="text-gray-500 text-xs font-medium">{} </p>
+                    </div>
+                </div>
             </div>
 
             {/* Profile Card State Selector */}
@@ -95,11 +106,11 @@ const Account = () => {
                     className="card"
                     style={{ padding: 20, marginBottom: 24, display: "flex", alignItems: "center", gap: 16, background: "#0f172a", borderRadius: 16 }}
                 >
-                    <div style={{ width: 60, height: 60, borderRadius: "50%", display: "flex", alignItems: "center", flexShrink: 0, overflow: "hidden" }}>
+                    <div style={{ width: 50, height: 50, borderRadius: "50%", display: "flex", alignItems: "center", flexShrink: 0, overflow: "hidden" }}>
                         <img
                             src={user.photoURL || `https://api.dicebear.com/7.x/initials/svg?seed=${user.displayName}`}
                             alt="Profile avatar"
-                            className="w-full h-full object-cover border-2 border-orange-500"
+                            className="w-full h-full object-cover "
                         />
                     </div>
                     <div>
@@ -119,7 +130,7 @@ const Account = () => {
                     style={{ padding: 20, marginBottom: 24, display: "flex", alignItems: "center", gap: 16, background: "#0f172a", borderRadius: 16 }}
                 >
                     <div style={{ width: 60, height: 60, borderRadius: "50%", background: "linear-gradient(135deg, #ea580c, #e63946)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26, flexShrink: 0, color: "#fff" }}>
-                        👤
+                        <FaUser/>
                     </div>
                     <div>
                         <p style={{ fontSize: "1.15rem", fontWeight: 600, color: "#fff" }}>Guest Mode</p>

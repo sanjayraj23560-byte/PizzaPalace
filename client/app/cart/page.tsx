@@ -128,7 +128,7 @@ const Cart: React.FC = () => {
               const res = await axios.post(`http://localhost:4000/api/order/getOrder`, {
                 cart: cart,
                 userID: user?.uid
-              });console.log("This -> ",res)
+              }); console.log("This -> ", res)
               if (res.status === 200) {
                 clearCart()
                 setTimeout(() => {
@@ -164,36 +164,46 @@ const Cart: React.FC = () => {
   return (
     <div className="w-full min-h-screen bg-black font-sans px-5 pt-6 pb-32 text-gray-400">
 
-      {/* Brand Title Row */}
-      <div className="mb-4">
-        <motion.span
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.45, ease: "easeOut" }}
-          className="text-4xl font-black text-white tracking-tight"
-        >
-          Pizz<span className="text-orange-500">A</span> Pala<span className="text-orange-600">c</span>e
-        </motion.span>
+      {/* Brand Title Frame */}
+      <motion.span
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          duration: 0.7,
+          delay: 0.45,
+          ease: "easeOut",
+        }}
+        className="text-4xl font-black text-white tracking-tight block mb-6 text-center sm:text-left"
+      >
+        Pizz<span className="text-orange-500">A</span> Pala
+        <span className="text-orange-600">c</span>
+        <span className="text-orange-500">e</span>
+      </motion.span>
+
+      {/* Header Context Action Bar matching Drinks page pattern */}
+      <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 text-center sm:text-left">
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          <button
+            className="bg-orange-500 text-black px-5 py-2.5 rounded-2xl text-sm font-bold border-0 cursor-pointer hover:bg-orange-600 transition"
+            onClick={() => navi.push('/')}
+          >
+            ← Back
+          </button>
+          <div>
+            <h1 className="text-[clamp(1.5rem,3vw,2.2rem)] text-amber-50 font-extrabold tracking-wide leading-none mb-1">
+              Your <span className="text-amber-700">Cart</span>
+            </h1>
+            <p className="text-gray-500 text-xs font-medium">{cart.length} cart item right now</p>
+          </div>
+        </div>
       </div>
 
-      {/* Navigation Header */}
-      <div className="flex items-center gap-3 mb-6">
-        <button
-          className="px-4 py-1.5 rounded-xl bg-slate-950/50 border border-amber-950/20 text-white text-xs font-semibold tracking-wide hover:border-orange-500/30 transition-all duration-200 active:scale-[0.98]"
-          onClick={() => navi.push('/home')}
-        >
-          ← Back
-        </button>
-        <h1 className="text-xl font-bold text-white">
-          Your <span className="text-orange-500">Cart</span>
-        </h1>
-      </div>
 
       {(!cart || cart.length === 0) ? (
         <div className="text-center mt-16 text-gray-500">
           <i className="ti ti-shopping-cart text-5xl block mb-3 text-gray-600" />
-          <h2 className="text-xl font-bold text-amber-200 mb-2">Empty cart </h2>
-          <button onClick={() => navi.push('/')} className="border-2 border-gray-600 rounded-2xl p-4 text-xl font-bold text-amber-600 mb-2">Get healthy snack <div className="flex flex-row justify-between"> <FaBowlFood /> <IoFastFoodSharp /> <FaPizzaSlice /></div></button>
+          <h2 className="text-xl font-bold text-amber-500 mb-2">Empty cart </h2>
+          <button onClick={() => navi.push('/')} className=" rounded-2xl p-4 text-xl font-bold text-amber-600 mb-2">Get healthy snack <div className="flex flex-row justify-between"> <FaBowlFood /> <IoFastFoodSharp /> <FaPizzaSlice /></div></button>
         </div>
       ) : (
         <div className="max-w-xl mx-auto space-y-6">
