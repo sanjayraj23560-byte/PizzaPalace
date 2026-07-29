@@ -5,6 +5,7 @@ import drinksOpt from './drinkRouter.js';
 import cart from './cartRouter.js';
 import chatBot from './chatBotRouter.js'
 import OnOrder from './orderRouter.js';
+import admin from './adminRouter.js'
 import orderPayment from './orderPaymentRouter.js';
 
 const router = Router();
@@ -14,6 +15,7 @@ router.use('/chatbot',chatBot)
 router.use('/order',OnOrder);
 router.use('/orderpayment', orderPayment);
 router.use('/getdrinks', drinksOpt);
+router.use('/admin',admin)
 router.use('/getpizza', pizzaRet);
 router.use('/user', user);
 
