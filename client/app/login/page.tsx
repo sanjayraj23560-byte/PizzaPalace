@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { auth, googleProvider } from '../../components/firebase';
 import { signInWithPopup } from 'firebase/auth';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { FaUserTie } from 'react-icons/fa6';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
@@ -39,8 +40,7 @@ export default function Login() {
       if (user) {
         navi.push('/')
       }
-      if(!user)
-      {
+      if (!user) {
         toast.error("User not found")
       }
       // Clean string interpolation spacing for toast alert
@@ -70,8 +70,8 @@ export default function Login() {
         <div className="space-y-4">
 
           {/* Username Input Container */}
-        
-    
+
+
         </div>
         <p className='p-2 hover:cursor-pointer' onClick={() => navi.push('/signup')}>No account ?<span className='text-amber-700'> sign up</span></p>
         {/* Visual Content Divider */}
@@ -93,6 +93,14 @@ export default function Login() {
             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
           </svg>
           Continue with Google
+        </button>
+
+        <button
+          onClick={()=>navi.push('/admin')}
+          className="flex items-center justify-center gap-3 mt-4 w-full py-2.5 bg-black border border-amber-950/40 text-white rounded-xl text-sm font-semibold tracking-wide hover:bg-neutral-900 hover:border-orange-500/40 transition-all duration-200 active:scale-[0.98]"
+        >
+         <FaUserTie/>
+          Continue as Admin
         </button>
       </div>
     </div>

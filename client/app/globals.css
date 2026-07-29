@@ -42,6 +42,21 @@ html body .Toastify__close-button {
   color: rgba(255, 255, 255, 0.5) !important;
 }
 
+/* Hide scrollbar */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Firefox */
+html {
+  scrollbar-width: none;
+}
+
+/* IE */
+body {
+  -ms-overflow-style: none;
+}
+
 html body .Toastify__close-button:hover {
   color: #ea580c !important;
 }
