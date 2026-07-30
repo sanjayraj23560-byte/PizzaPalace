@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { User, Lock, Eye, EyeOff, Loader2, AlertCircle } from 'lucide-react';
 import { FaUserShield } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 function Admin() {
   const [name, setName] = useState('');
@@ -25,10 +26,13 @@ function Admin() {
         user: name,
         password: password,
       });
-      console.log(res);
       if (res.data === true) {
         navi.push('/adminPanel');
-      } else {
+      }
+      if (res.data === false) {
+        toast.error("UserName or Passsword is Wrong")
+      }
+      else {
         setError('Invalid username or password');
       }
     } catch (err) {
@@ -45,7 +49,7 @@ function Admin() {
 
   return (
     /* Deepened background: near-black navy midnight gradient */
-    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-[#020617] via-[#050b18] to-[#091026] px-4 font-sans">
+    <div className="min-h-screen w-full flex items-center justify-center bg-linear-to-br from-[#020617] via-[#050b18] to-[#091026] px-4 font-sans">
       <div className="w-full max-w-sm">
         {/* Header */}
         <div className="flex flex-col items-center mb-8">

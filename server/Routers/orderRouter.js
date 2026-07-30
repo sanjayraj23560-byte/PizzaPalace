@@ -21,7 +21,7 @@ router.post('/showOrders', async (req, res) => {
             userID: userID
         })
         const touchOrders = {
-            message: "No orders yet", 
+            message: "No orders yet",
         }
         if (fetchOrders == null) {
             await res.status(200).json({ touchOrders })
@@ -31,6 +31,17 @@ router.post('/showOrders', async (req, res) => {
             await res.status(200).json({ fetchOrders })
 
         }
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+router.post('/admin-orders', async (req, res) => {
+    try {
+        console.log("Server !!!!!!!!!!!!!!!!!!!!!!!")
+        const orders = await orderModel.find()
+        console.log(req.body, "Client ")
+        res.send(orders)
     } catch (error) {
         console.log(error)
     }
