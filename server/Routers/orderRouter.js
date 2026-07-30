@@ -38,9 +38,7 @@ router.post('/showOrders', async (req, res) => {
 
 router.post('/admin-orders', async (req, res) => {
     try {
-        console.log("Server !!!!!!!!!!!!!!!!!!!!!!!")
         const orders = await orderModel.find()
-        console.log(req.body, "Client ")
         res.send(orders)
     } catch (error) {
         console.log(error)
