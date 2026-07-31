@@ -6,7 +6,8 @@ import { useRouter } from 'next/navigation';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import axios from 'axios';
 import { FaBagShopping, FaPizzaSlice, FaBowlFood } from 'react-icons/fa6';
-import { FaArrowDownWideShort } from 'react-icons/fa6';
+import { CupSoda,LucidePizza, Pizza  } from 'lucide-react';
+import { FaArrowDownWideShort ,Fa500Px } from 'react-icons/fa6';
 import { LoaderPinwheelIcon } from 'lucide-react';
 
 export default function Orders() {
@@ -141,9 +142,16 @@ export default function Orders() {
                                             Order #<span className="text-amber-500">{orders.length - idx}</span>
                                         </h3>
                                     </div>
-                                    <div>
+                                    <div className='flex gap-5 items-center'>
                                         <h1 className="text-xs uppercase font-bold tracking-wider animate-pulse text-green-400 bg-green-950/40 px-3 py-1 rounded-full border border-green-800/40">
-                                            {order.status}
+                                           <CupSoda/>
+                                           
+                                        </h1>
+                                        <h1  className="text-xs uppercase font-bold tracking-wider animate-pulse text-orange-400 bg-orange-950/40 px-3 py-1 rounded-full border border-orange-800/40">
+                                            <Pizza/>
+                                        </h1>
+                                        <h1>
+
                                         </h1>
                                     </div>
                                     <h1 className="text-sm text-slate-400">{order.time}</h1>

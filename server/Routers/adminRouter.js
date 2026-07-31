@@ -4,6 +4,7 @@ dotenv.config();
 import { Router } from 'express';
 import orderModel from '../Models/orderModel.js';
 
+
 const router = Router();
 
 // Admin Login Check
@@ -24,33 +25,21 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Helper Function for Updating Order Status
-const updateOrderStatus = async (req, res, newStatus) => {
+const updateCartItemStatus = async (req, res, newStatus) => {
     try {
-        const { itemId } = req.body;
-        console.log(`Updating ${itemId} to ${newStatus}`);
+        const { itemId } = req.body; // This is the _id of the PRODUCT inside cart
+        console.log(`Updating product ${itemId} to ${newStatus}`);
 
-        // Try updating by main Order ID first
-        let updatedDocument = await orderModel.findOneAndUpdate(
-            { _id: itemId },
-            { $set: { status: newStatus } },
+        const updatedDocument = await orderModel.findOneAndUpdate(
+            { "cart._id": itemId },                      // 1. Find the order containing this product ID
+            { $set: { "cart.$.status": newStatus } },    // 2. Target ONLY that specific product in the array
             { returnDocument: 'after' }
         );
 
-        // If not found by main ID, try matching a nested cart item ID
         if (!updatedDocument) {
-            updatedDocument = await orderModel.findOneAndUpdate(
-                { "cart._id": itemId },
-                { $set: { status: newStatus, "cart.$.status": newStatus } },
-                { returnDocument: 'after' }
-            );
+            return res.status(404).json({ success: false, message: "Item not found in any order" });
         }
 
-        if (!updatedDocument) {
-            return res.status(404).json({ success: false, message: "Order or Item not found" });
-        }
-
-        // CRITICAL: Always return a response so the client finishes the HTTP call
         return res.status(200).json({ success: true, data: updatedDocument });
 
     } catch (error) {
@@ -59,10 +48,10 @@ const updateOrderStatus = async (req, res, newStatus) => {
     }
 };
 
-// Update Routes using the helper
-router.put('/putdone', (req, res) => updateOrderStatus(req, res, 'Delivered'));
-router.put('/putprep', (req, res) => updateOrderStatus(req, res, 'Preparing'));
-router.put('/puton', (req, res) => updateOrderStatus(req, res, 'On the way'));
-router.put('/putcancel', (req, res) => updateOrderStatus(req, res, 'Canceled (Out of stock)'));
+// Update Routes
+router.put('/putdone', (req, res) => updateCartItemStatus(req, res, 'Delivered'));
+router.put('/putprep', (req, res) => updateCartItemStatus(req, res, 'Preparing'));
+router.put('/puton', (req, res) => updateCartItemStatus(req, res, 'On the way'));
+router.put('/putcancel', (req, res) => updateCartItemStatus(req, res, 'Canceled (Out of stock)'));
 
 export default router;

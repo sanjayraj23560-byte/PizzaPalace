@@ -11,14 +11,9 @@ const orderSchema = new mongoose.Schema(
                 quantity: Number,
                 img: String,
                 _id: String,
-            },
+                status: { type: String, default: 'waiting' } // <-- Add status to each cart item
+            }
         ],
-
-        status: {
-            type: String,
-            default: "waiting", // Cleaned: Removed returnDocument
-        },
-
         time: {
             type: String,
             default: () => new Date().toLocaleString(), // Executes dynamically per order
