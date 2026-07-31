@@ -24,7 +24,7 @@ interface Order {
     userID: string;
 }
 
-export default function AdminPanel() {
+function AdminPanel() {
     const [orders, setOrders] = useState<Order[]>([]);
     const [openOrderId, setOpenOrderId] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -103,7 +103,7 @@ export default function AdminPanel() {
             <header className="max-w-5xl mx-auto mb-8 flex justify-between items-center border-b border-slate-800 pb-4">
                 <div>
                     <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                        <FaPizzaSlice/> Pizza Palace <span className="text-orange-500 font-mono text-sm px-2 py-0.5 rounded bg-orange-950/50 border border-orange-900/50">Admin</span>
+                        <FaPizzaSlice /> Pizza Palace <span className="text-orange-500 font-mono text-sm px-2 py-0.5 rounded bg-orange-950/50 border border-orange-900/50">Admin</span>
                     </h1>
                     <p className="text-xs text-slate-400 mt-1">Manage kitchen dispatch and live order fulfillment</p>
                 </div>
@@ -233,3 +233,4 @@ export default function AdminPanel() {
         </div>
     );
 }
+export default AdminPanel

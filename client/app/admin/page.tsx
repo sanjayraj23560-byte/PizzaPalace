@@ -27,14 +27,14 @@ function Admin() {
         password: password,
       });
       if (res.data === true) {
-        navi.push('/adminPanel');
+        navi.push('/adminsection');
       }
       if (res.data === false) {
         toast.error("UserName or Passsword is Wrong")
       }
     } catch (err) {
       console.error(err);
-      setError('Something went wrong. Please try again.');
+      setError('Incorrect credintials');
     } finally {
       setLoading(false);
     }
