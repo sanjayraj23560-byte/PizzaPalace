@@ -6,6 +6,7 @@ import axios from "axios"
 import { toast } from "react-toastify";
 import { CartContext } from "@/context/cartContext";
 import { useCart } from "@/context/cartContext";
+import { auth } from "@/components/firebase";
 
 interface DrinkItem {
   name: string;
@@ -20,6 +21,7 @@ const DrinkSection = () => {
   const { addToCart, cart, clearCart, getCartTotal, removeFromCart } = useCart()
   const [drinks, setDrinks] = useState<DrinkItem[]>([])
   const navi = useRouter()
+  const user = auth.currentUser
 
   useEffect(() => {
     const fetchDrinks = async () => {
@@ -49,7 +51,7 @@ const DrinkSection = () => {
 
   const handleAdd = (d: DrinkItem) => {
     addToCart(d)
-    toast.success(`${d.name} added to cart! 🥤`);
+    if (user) toast.success(`${d.name} added to cart! 🥤`);
   }
 
   return (

@@ -3,6 +3,7 @@ import React, { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { auth } from "@/components/firebase";
 import { User, onAuthStateChanged } from "firebase/auth";
+import { toast } from "react-toastify";
 
 interface CartItem {
     productId: string;
@@ -39,7 +40,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setUser(currentUser);
             setLoading(false); // Stop loading once Firebase resolves the user status
             if (!currentUser) {
-                setCart([]); // Clear state if user signs completely out
+                setCart([]); 
+                
+                // Clear state if user signs completely out
             }
         });
 
@@ -69,7 +72,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const addToCart = async (product: any) => {
         if (!user?.uid) {
-            console.log("Cannot add to cart: No authenticated user found");
+            toast.error("Please Login")
             return;
         }
         try {
@@ -78,8 +81,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 product: product,
                 productId: product._id
             });
-            console.log(product)
-            console.log(response)
             if (response.data && response.data.items) {
                 setCart(response.data.items);
             }

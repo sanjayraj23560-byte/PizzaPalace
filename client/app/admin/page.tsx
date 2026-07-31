@@ -32,9 +32,6 @@ function Admin() {
       if (res.data === false) {
         toast.error("UserName or Passsword is Wrong")
       }
-      else {
-        setError('Invalid username or password');
-      }
     } catch (err) {
       console.error(err);
       setError('Something went wrong. Please try again.');

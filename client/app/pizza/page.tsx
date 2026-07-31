@@ -9,6 +9,7 @@ import { toast } from "react-toastify"
 import { CartContext, CartProvider } from "@/context/cartContext"
 import { motion } from "framer-motion"
 import axios from "axios"
+import { auth } from "@/components/firebase"
 
 interface Pizza {
   img: string;
@@ -24,12 +25,15 @@ const PizzaSection = () => {
   // const { addToCart } =   CartProvider
   const { cart, addToCart, removeFromCart, getCartTotal, clearCart } = useCart()
   const navi = useRouter()
+  const user = auth.currentUser
   const [pizzas, setPizzas] = useState<Pizza[]>([]);
 
   const addtoCart = async (p: any) => {
 
     await addToCart(p)
-    toast.success(`${p.name} cart! 🍕`)
+    if (user) {
+      toast.success(`${p.name} cart! 🍕`)
+    }
   }
 
   useEffect(() => {

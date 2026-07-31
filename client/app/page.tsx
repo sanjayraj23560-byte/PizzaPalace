@@ -10,6 +10,7 @@ import { CupSodaIcon, CupSoda } from "lucide-react";
 import { FaFireFlameCurved } from "react-icons/fa6";
 import axios from "axios";
 import { useCart } from "@/context/cartContext";
+import { auth } from "@/components/firebase";
 
 // 🚀 LESSON 1: Set explicit data types (string, number), NEVER literal booleans (true)
 interface MenuItem {
@@ -29,6 +30,7 @@ const Home = () => {
   const { addToCart, cart, clearCart, getCartTotal, removeFromCart } = useCart()
   const [loading, setLoading] = useState(true);
   const [pizzas, setPizzas] = useState<MenuItem[]>([]);
+  const user = auth.currentUser
   const [drinks, setDrinks] = useState<MenuItem[]>([]);
   const [search, setSearch] = useState("");
 
@@ -76,7 +78,7 @@ const Home = () => {
 
   const handleAdd = (item: MenuItem) => {
     addToCart(item)
-    toast.success(`${item.name} added to cart! 🛒`);
+    if(user) toast.success(`${item.name} added to cart! 🛒`);
   };
 
   // 🚀 LESSON 3: Combine discrete state layers explicitly before running filters

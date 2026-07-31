@@ -1,5 +1,5 @@
 'use client';
-import React, { useContext, useState } from "react";
+import React, { use, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { auth } from '../../components/firebase';
 import { FaBowlFood } from "react-icons/fa6";
@@ -8,7 +8,7 @@ import { FaPizzaSlice } from "react-icons/fa6";
 import { IoFastFoodSharp } from "react-icons/io5";
 import { motion, AnimatePresence } from "framer-motion";
 import { CartContext } from "../../context/cartContext";
-
+import { onAuthStateChanged, User } from "firebase/auth";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { reload } from "firebase/auth";
@@ -46,7 +46,6 @@ const Cart: React.FC = () => {
 
   // Destructuring types inferred directly from CartContext framework layout
   const { cart, addToCart, removeFromCart, getCartTotal, clearCart } = useContext(CartContext);
-
   const [showAddressModal, setShowAddressModal] = useState<boolean>(false);
   const [address, setAddress] = useState<AddressState>({
     name: "",
@@ -59,14 +58,15 @@ const Cart: React.FC = () => {
   const [step, setStep] = useState<string>("address");
   const [Order, setOrder] = useState<RazorpayOrderResponse[]>([])
   const user = auth.currentUser;
+  const [IsUser, setIsUser] = useState(true)
   const userId = auth.currentUser?.uid;
   const router = useRouter()
+
   const removeItemFromCart = (item: any) => {
     window.location.reload();
     removeFromCart(item)
     toast.info("Removed from cart")
   }
-  // Fully Typed Input Change Handler
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAddress({ ...address, [e.target.name]: e.target.value });
   };
@@ -204,7 +204,13 @@ const Cart: React.FC = () => {
           <i className="ti ti-shopping-cart text-5xl block mb-3 text-gray-600" />
           <h2 className="text-xl font-bold text-amber-500 mb-2">Empty cart </h2>
           <button onClick={() => navi.push('/')} className=" rounded-2xl p-4 text-xl font-bold text-amber-600 mb-2">Get healthy snack <div className="flex flex-row justify-between"> <FaBowlFood /> <IoFastFoodSharp /> <FaPizzaSlice /></div></button>
+          {
+            IsUser && <>
+              <h1>Login to Check out !</h1>
+            </>
+          }
         </div>
+
       ) : (
         <div className="max-w-xl mx-auto space-y-6">
 

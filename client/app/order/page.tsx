@@ -1,22 +1,19 @@
 'use client';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import { auth } from '@/components/firebase';
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import axios from 'axios';
-import { FaBagShopping, FaPizzaSlice, FaBowlFood, FaHandDots } from 'react-icons/fa6';
+import { FaBagShopping, FaPizzaSlice, FaBowlFood } from 'react-icons/fa6';
 import { FaArrowDownWideShort } from 'react-icons/fa6';
-import { LeafyGreenIcon, DotIcon } from 'lucide-react';
 import { LoaderPinwheelIcon } from 'lucide-react';
-import { CartContext } from '../../context/cartContext';
 
 export default function Orders() {
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
     const [orders, setOrders] = useState<any[]>([]);
-    const [drop, setDrop] = useState<String | null>(null);
-    const [orderStatus, setOrderStatus] = useState<any[]>([])
+    const [drop, setDrop] = useState<string | null>(null);
     const [noOrders, setNoOrders] = useState(false);
     const [loading, setLoading] = useState(true);
 
@@ -24,7 +21,7 @@ export default function Orders() {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             if (!currentUser) {
-                // User is not logged in -> redirect to login page
+                // User is not logged in -> redirect to signup page
                 router.push('/signup');
             } else {
                 setUser(currentUser);
@@ -36,13 +33,13 @@ export default function Orders() {
 
     const showItem = (id: string) => {
         if (drop === id) {
-            setDrop(null);      // close it
+            setDrop(null); // Close dropdown
         } else {
-            setDrop(id);        // open it
+            setDrop(id); // Open dropdown
         }
     };
 
-    // 2. Fetch Orders when `user` is confirmed
+    // 2. Fetch Orders when `user` is confirmed & sort descending
     useEffect(() => {
         if (!user) return; // Wait until Firebase resolves user
 
@@ -52,8 +49,17 @@ export default function Orders() {
                 const res = await axios.post('http://localhost:4000/api/order/showOrders', {
                     user: user.uid,
                 });
-                console.log(res.data)
-                setOrders([...res.data.fetchOrders])
+                console.log(res.data);
+                
+                const fetchedOrders = res.data.fetchOrders || [];
+                
+                if (fetchedOrders.length === 0) {
+                    setNoOrders(true);
+                } else {
+                    // Reverse/sort orders array so newest items display first
+                    setOrders([...fetchedOrders].reverse());
+                    setNoOrders(false);
+                }
             } catch (err) {
                 console.error('Error fetching orders:', err);
                 setNoOrders(true);
@@ -65,7 +71,7 @@ export default function Orders() {
         getOrders();
     }, [user]);
 
-    // 3. Render Loading Screen while Firebase checks auth state
+    // 3. Initial Auth Verification Loader
     if (loading && !user) {
         return (
             <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-100">
@@ -78,15 +84,14 @@ export default function Orders() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-950  items-center justify-center mt-10 text-slate-100 p-4 md:p-8 selection:bg-orange-500 selection:text-white">
+        <div className="min-h-screen bg-slate-950 items-center justify-center mt-10 text-slate-100 p-4 md:p-8 selection:bg-orange-500 selection:text-white">
             {/* Header */}
             <div className="max-w-5xl mx-auto mb-8 flex items-center justify-between border-b border-slate-800 pb-4">
                 <h2 className="text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-linear-to-r from-orange-400 via-orange-500 to-amber-500 flex items-center gap-3">
                     <FaBagShopping className="w-8 h-8 text-orange-500" />
                     Your Orders
-
                 </h2>
-                <LoaderPinwheelIcon className='text-violet-500 animate-spin' />
+                <LoaderPinwheelIcon className="text-violet-500 animate-spin" />
             </div>
 
             <div className="max-w-5xl mx-auto space-y-6">
@@ -121,58 +126,67 @@ export default function Orders() {
                     </div>
                 )}
 
-                {/* ORDERS LIST STATE */}
+                {/* ORDERS LIST STATE (Descending Order Displayed) */}
                 {!loading && !noOrders && orders.length > 0 && (
-                    <div className="grid gap-4 ">
+                    <div className="grid gap-4">
                         {orders.map((order, idx) => (
                             <div
                                 key={order._id}
-                                className="bg-slate-900 rounded-xl p-5 border border-slate-700">
-
-                                <div className='flex justify-between'>
+                                className="bg-slate-900 rounded-xl p-5 border border-slate-700"
+                            >
+                                <div className="flex justify-between items-center">
                                     <div>
-                                        <p className='text-[10px] text-green-700'>Order ID :{order._id}</p>
-                                        <h3 className='flex'>Order ID : <p className='text-amber-700'>{idx + 1}</p> </h3>
+                                        <p className="text-[10px] text-green-500 font-mono">Order ID: {order._id}</p>
+                                        <h3 className="flex items-center gap-1 font-semibold text-slate-200">
+                                            Order #<span className="text-amber-500">{orders.length - idx}</span>
+                                        </h3>
                                     </div>
                                     <div>
-                                        <h1 className='text-[10px] animate-pulse text-green-300'>{ 
-                                            order.status
-                                        }</h1>
+                                        <h1 className="text-xs uppercase font-bold tracking-wider animate-pulse text-green-400 bg-green-950/40 px-3 py-1 rounded-full border border-green-800/40">
+                                            {order.status}
+                                        </h1>
                                     </div>
-                                    <h1>{
-                                        order.time}</h1>
+                                    <h1 className="text-sm text-slate-400">{order.time}</h1>
                                     <div>
-                                        <button onClick={() => showItem(order._id)}><FaArrowDownWideShort /></button>
+                                        <button 
+                                            onClick={() => showItem(order._id)}
+                                            className="p-2 hover:bg-slate-800 rounded-lg transition-colors text-slate-300"
+                                            aria-label="Toggle order details"
+                                        >
+                                            <FaArrowDownWideShort size={15} className={`transition-transform duration-200 ${drop === order._id ? 'rotate-180 text-orange-500' : ''}`} />
+                                        </button>
                                     </div>
                                 </div>
 
-                                {
-                                    drop === order._id && (
-                                        order.cart.map((item: any) => (
+                                {/* Collapsible Cart Items */}
+                                {drop === order._id && (
+                                    <div className="mt-4 pt-4 border-t border-slate-800 space-y-3">
+                                        {order.cart?.map((item: any) => (
                                             <div
                                                 key={item._id}
-                                                className="flex justify-between items-center border-b border-slate-800 py-4"
+                                                className="flex justify-between items-center border-b border-slate-800/60 pb-3 last:border-0 last:pb-0"
                                             >
-                                                <div className="flex gap-4">
+                                                <div className="flex gap-4 items-center">
                                                     <img
                                                         src={item.img}
-                                                        className="w-20 h-20 rounded-lg"
+                                                        alt={item.name}
+                                                        className="w-16 h-16 object-cover rounded-lg border border-slate-800"
                                                     />
 
                                                     <div>
-                                                        <h3>{item.name}</h3>
-                                                        <p>{item.desc}</p>
-                                                        <p>₹{item.price}</p>
+                                                        <h4 className="font-semibold text-slate-100 text-sm">{item.name}</h4>
+                                                        <p className="text-xs text-slate-400">{item.desc}</p>
+                                                        <p className="text-sm font-bold text-orange-400 mt-1">₹{item.price}</p>
                                                     </div>
                                                 </div>
 
-                                                <div className="text-orange-500">
-                                                    {item.status}
+                                                <div className="text-xs font-semibold text-orange-400 bg-orange-950/20 border border-orange-500/20 px-2.5 py-1 rounded-md">
+                                                    {item.status || order.status}
                                                 </div>
                                             </div>
-                                        ))
-                                    )
-                                }
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         ))}
                     </div>
