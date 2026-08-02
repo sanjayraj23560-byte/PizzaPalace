@@ -1,5 +1,5 @@
 import express from 'express';
-import drinkModel from '../Models/drinkModel.js';
+import drinkModel from '../models/drinkModel.js';
 import { Router } from 'express';
 
 const router = Router();

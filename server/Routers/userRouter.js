@@ -1,5 +1,5 @@
 import express from "express";
-import userModel from '../Models/user.js'
+import userModel from '../models/user.js'
 const router = express.Router();
 
 router.post("/ret", async (req, res) => {

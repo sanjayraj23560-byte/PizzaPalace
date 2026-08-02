@@ -2,7 +2,7 @@ import express from 'express'; // Fixed typo (expres -> express)
 import dotenv from 'dotenv';
 dotenv.config();
 import { Router } from 'express';
-import orderModel from '../Models/orderModel.js';
+import orderModel from '../models/orderModel.js';
 
 
 const router = Router();

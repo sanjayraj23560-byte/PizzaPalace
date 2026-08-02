@@ -1,7 +1,7 @@
 import express from 'express'; // 💡 Cleaned up the import
 import DataBase from './DB.js';
 import cors from 'cors';
-import router from '../Routers/index.js';
+import router from '../routers/index.js';
 
 const app = express();
 const PORT = 4000;
