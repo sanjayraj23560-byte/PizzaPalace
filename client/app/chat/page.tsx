@@ -40,7 +40,7 @@ export default function ChatBox() {
         setLoading(true);
 
         try {
-            const res = await axios.post('http://localhost:4000/api/chatbot', {
+            const res = await axios.post('${process.env.NEXT_PUBLIC_API_URL}/api/chatbot', {
                 messages: updatedMessages,
             });
             setMessages([...updatedMessages, { role: 'assistant', content: res.data.reply }]);

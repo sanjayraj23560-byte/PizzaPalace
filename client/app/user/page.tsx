@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 
-// Mock initial users data (Replace with useEffect API fetch from http://localhost:4000/api/users)
+// Mock initial users data (Replace with useEffect API fetch from ${process.env.NEXT_PUBLIC_API_URL}/api/users)
 const INITIAL_USERS = [
     {
         id: 'usr_1',
@@ -82,7 +82,7 @@ export default function UserManagement() {
     const handleRoleChange = (userId: string, newRole: string) => {
         setUsers(prev => prev.map(u => u.id === userId ? { ...u, role: newRole } : u));
         // Optional: Send PUT request to Express backend here
-        // fetch(`http://localhost:4000/api/users/${userId}/role`, { method: 'PUT', body: JSON.stringify({ role: newRole }) })
+        // fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${userId}/role`, { method: 'PUT', body: JSON.stringify({ role: newRole }) })
     };
 
     // 3. Handle Status Toggle (Active vs Suspended)

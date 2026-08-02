@@ -20,7 +20,7 @@ export default function FoodCatalog() {
     setMessage(null);
 
     try {
-      const res = await fetch('http://localhost:4000/api/food/add', {
+      const res = await fetch('${process.env.NEXT_PUBLIC_API_URL}/api/food/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),

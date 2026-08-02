@@ -47,7 +47,7 @@ export default function Orders() {
         const getOrders = async () => {
             setLoading(true);
             try {
-                const res = await axios.post('http://localhost:4000/api/order/showOrders', {
+                const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/order/showOrders`, {
                     user: user.uid,
                 });
                 console.log(res.data);

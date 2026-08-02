@@ -47,7 +47,7 @@ function AdminPanel() {
                 }))
             );
 
-            await axios.put(`http://localhost:4000/api/admin/${endpoint}`, {
+            await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/${endpoint}`, {
                 itemId,
                 operation: `Update as ${statusLabel.toLowerCase()}`
             });
@@ -61,7 +61,7 @@ function AdminPanel() {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const res = await axios.post('http://localhost:4000/api/order/admin-orders');
+                const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/order/admin-orders`);
                 setOrders(res.data);
             } catch (error) {
                 console.error('Error fetching admin orders:', error);

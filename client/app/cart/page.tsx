@@ -89,7 +89,7 @@ const Cart: React.FC = () => {
     setPlacing(true);
 
     try {
-      const res = await axios.post(`http://localhost:4000/api/orderPayment/create-order`, {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/orderPayment/create-order`, {
         amount: getCartTotal()
       });
       if (res.status === 400) {
@@ -115,7 +115,7 @@ const Cart: React.FC = () => {
       handler: async (response: RazorpayOrderResponse) => {
         try {
           console.log("Initing payment !")
-          const res = await axios.post(`http://localhost:4000/api/orderpayment/verify-sign`, {
+          const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/orderpayment/verify-sign`, {
             response,
           });
           setShowAddressModal(false);
@@ -125,7 +125,7 @@ const Cart: React.FC = () => {
             toast.success("Payment Done...!")
             const OnOrder = async () => {
               console.log("Orders save !")
-              const res = await axios.post(`http://localhost:4000/api/order/getOrder`, {
+              const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/order/getOrder`, {
                 cart: cart,
                 userID: user?.uid
               }); console.log("This -> ", res)

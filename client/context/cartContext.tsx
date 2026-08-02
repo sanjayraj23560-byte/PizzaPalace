@@ -55,7 +55,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
             if (!user?.uid) return; // Guard clause: Prevent fetching if UID doesn't exist yet
 
             try {
-                const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+                const apiUrl = process.env.NEXT_PUBLIC_API_URL || "${process.env.NEXT_PUBLIC_API_URL}";
                 const res = await axios.get(`${apiUrl}/api/cart/${user.uid}`);
                 if (res.data && res.data.items) {
                     setCart(res.data.items);
@@ -107,7 +107,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const clearCart = () => {
-        const res = axios.post(`http://localhost:4000/api/cart/clear`, {
+        const res = axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/cart/clear`, {
             userID: "Hey there",
             user:user?.uid
         })
