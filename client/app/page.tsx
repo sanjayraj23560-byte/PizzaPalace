@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import { FaHand } from "react-icons/fa6";
 import { FaPizzaSlice } from "react-icons/fa6";
 import { FaCartPlus } from "react-icons/fa6";
+// app/page.tsx
+import { redirect } from 'next/navigation';
 import { CupSodaIcon, CupSoda } from "lucide-react";
 import { FaFireFlameCurved } from "react-icons/fa6";
 import axios from "axios";
