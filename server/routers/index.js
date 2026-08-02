@@ -1,0 +1,22 @@
+import { Router } from "express";
+import pizzaRet from './pizzaRouter.js';
+import user from './userRouter.js';
+import drinksOpt from './drinkRouter.js';
+import cart from './cartRouter.js';
+import chatBot from './chatBotRouter.js'
+import OnOrder from './orderRouter.js';
+import admin from './adminRouter.js'
+import orderPayment from './orderPaymentRouter.js';
+
+const router = Router();
+
+router.use('/cart', cart);
+router.use('/chatbot',chatBot)
+router.use('/order',OnOrder);
+router.use('/orderpayment', orderPayment);
+router.use('/getdrinks', drinksOpt);
+router.use('/admin',admin)
+router.use('/getpizza', pizzaRet);
+router.use('/user', user);
+
+export default router;
