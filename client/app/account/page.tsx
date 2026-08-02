@@ -22,7 +22,7 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
     { label: "My Orders", icon: ListOrdered, path: "/order", color: "#ff6464", desc: "Track & reorder" },
     { label: "Coupons", icon: Ticket, path: "/coupons", color: "#ffc850", desc: "Deals & offers" },
-    { label: "Membership", icon: Crown, path: "/member", color: "#f5c842", desc: "Your tier & perks" },
+    { label: "Membership", icon: Crown, path: "/membership", color: "#f5c842", desc: "Your tier & perks" },
     { label: "Help", icon: FaHeadset, path: "/help", color: "#50b4ff", desc: "Support & FAQs" },
 ];
 

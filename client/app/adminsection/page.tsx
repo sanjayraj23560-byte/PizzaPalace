@@ -6,13 +6,18 @@ import {
     UtensilsCrossed,
     BarChart3,
     Users,
-    Settings,
+    Settings2,
     Pizza,
     LogOut,
     Bell,
     Sparkles
 } from 'lucide-react';
-import AdminPanel from '../adminPanel/page'; // <-- Your Order Management page component
+import AdminPanel from '../adminPanel/page';
+import Analytics from '../anasysis/page';
+import Upload from '../upload/page';
+import UserManagement from '../user/page';
+import Settings from '../dashborad/page';
+// <-- Your Order Management page component
 import { toast } from 'react-toastify';
 // import FoodCatalog from '../food/page';   <-- Example: Import your Food page
 // import Analytics from '../analytics/page'; <-- Example: Import your Analytics page
@@ -21,7 +26,7 @@ import { toast } from 'react-toastify';
 export default function Section() {
     // State to track which page is currently selected
     const navi = useRouter()
-    const [activeTab, setActiveTab] = useState<'orders' | 'food' | 'analytics' | 'users' | 'settings'>('orders');
+    const [activeTab, setActiveTab] = useState<'orders' | 'food' | 'analytics' | 'users' | 'Settings'>('orders');
 
     // Sidebar navigation items
     const navItems = [
@@ -29,7 +34,7 @@ export default function Section() {
         { id: 'food', label: 'Food Catalog & Menu', icon: UtensilsCrossed },
         { id: 'analytics', label: 'Analytics & Sales', icon: BarChart3 },
         { id: 'users', label: 'User Management', icon: Users },
-        { id: 'settings', label: 'Dashboard Settings', icon: Settings },
+        { id: 'settings', label: 'Dashboard Settings', icon: Settings2 },
     ];
 
     // Helper function to render the active page dynamically
@@ -39,18 +44,18 @@ export default function Section() {
                 return <AdminPanel />; // Displays your active Orders page
 
             case 'food':
-                // return <FoodCatalog />;
+                return <Upload />;
                 return <div className="text-slate-400 p-8">Food Catalog Page Component Goes Here</div>;
 
             case 'analytics':
-                // return <Analytics />;
+                return <Analytics />;
                 return <div className="text-slate-400 p-8">Analytics Page Component Goes Here</div>;
 
             case 'users':
-                // return <UserManagement />;
+                return <UserManagement />;
                 return <div className="text-slate-400 p-8">User Management Page Component Goes Here</div>;
 
-            case 'settings':
+            case 'Settings':
                 return <div className="text-slate-400 p-8">Dashboard Settings Page Component Goes Here</div>;
 
             default:
