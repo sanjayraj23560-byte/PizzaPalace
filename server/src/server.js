@@ -8,7 +8,7 @@ const PORT = 4000;
 
 // 1. Enable CORS first
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: "https://pizzapalace-q71o.onrender.com",
     credentials: true
 }));
 
