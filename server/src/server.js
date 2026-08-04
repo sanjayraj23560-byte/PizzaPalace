@@ -8,17 +8,20 @@ import router from '../routers/index.js';
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// Update allowed origins
 const allowedOrigins = [
     "http://localhost:3000",
     "http://localhost:5173",
-    "https://pizza-palace-lac.vercel.app/pizza" // 👈 Add your exact Vercel URL here
+    "https://pizza-palace-lac.vercel.app", // Stripped trailing paths like /pizza
 ];
 
 app.use(cors({
     origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl) or if origin is in whitelist
-        if (!origin || allowedOrigins.includes(origin)) {
+        // Allow requests with no origin or matching your main domain or ANY Vercel deployment preview URL
+        if (
+            !origin ||
+            allowedOrigins.includes(origin) ||
+            origin.endsWith(".vercel.app") // Automatically allows preview branch URLs
+        ) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
