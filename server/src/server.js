@@ -6,12 +6,18 @@ import router from '../routers/index.js';
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// Allow requests from your Next.js frontend origin
+
 app.use(cors({
-    origin: ["http://localhost:3000", "http://localhost:5173" , "https://pizza-palace-ere9.onrender.com"],
+    origin: [
+        "http://localhost:3000",
+        "http://localhost:5173",
+        // Add your deployed Vercel domain below (WITHOUT trailing slashes)
+        "https://pizza-palace-rd281jq81-sanjayraj23560-bytes-projects.vercel.app",
+        // If you have a custom or shorter Vercel production URL, add it too:
+        "https://pizza-palace.vercel.app"
+    ],
     credentials: true
 }));
-
 app.use(express.json());
 
 DataBase();
