@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { FaCartPlus } from "react-icons/fa6"
+import { FaBowlFood, FaBowlRice, FaCartPlus } from "react-icons/fa6"
+import { Loader2Icon } from "lucide-react"
 import { useContext } from "react"
 import { useCart } from "@/context/cartContext"
 import { toast } from "react-toastify"
@@ -25,6 +26,7 @@ const PizzaSection = () => {
   // const { addToCart } =   CartProvider
   const { cart, addToCart, removeFromCart, getCartTotal, clearCart } = useCart()
   const navi = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
   const user = auth.currentUser
   const [pizzas, setPizzas] = useState<Pizza[]>([]);
 
@@ -39,6 +41,7 @@ const PizzaSection = () => {
   useEffect(() => {
     const Fetch_pizza = async () => {
       try {
+        setIsLoading(true)
         const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/getpizza`)
         if (res.data && res.data.getPizza) {
           setPizzas(res.data.getPizza)
@@ -46,6 +49,9 @@ const PizzaSection = () => {
       } catch (error) {
         console.log(error)
         toast.error("Failed to load your gourmet pizzas.")
+      }
+      finally {
+        setIsLoading(false)
       }
     };
     Fetch_pizza()
@@ -94,47 +100,52 @@ const PizzaSection = () => {
         variants={stagger} initial="initial" animate="animate"
         className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6"
       >
-        {pizzas.map((p, index) => (
-          <motion.div
-            key={index}
-            variants={fadeUp}
-            whileHover={{ y: -6, boxShadow: "0 20px 40px rgba(0,0,0,0.6)" }}
-            // 🎨 Dark Blue Card Base with smooth premium subtle borders
-            className="bg-slate-950/70 border border-amber-950/20 rounded-3xl overflow-hidden flex flex-col transition-all duration-300 w-full"
-          >
-            {/* Image Layer - Standing tall at h-56 to protect the vertical aspect ratio */}
-            <img
-              src={p.img}
-              alt={p.name}
-              className="w-full h-56 object-cover block border-b border-amber-950/10"
-            />
+        {
+          isLoading ? <div className="fixed inset-0 flex items-center justify-center">
+            <FaBowlFood size={40} className="animate-bounce text-orange-500" />
+          </div> : <>
+            {pizzas.map((p, index) => (
+              <motion.div
+                key={index}
+                variants={fadeUp}
+                whileHover={{ y: -6, boxShadow: "0 20px 40px rgba(0,0,0,0.6)" }}
+                // 🎨 Dark Blue Card Base with smooth premium subtle borders
+                className="bg-slate-950/70 border border-amber-950/20 rounded-3xl overflow-hidden flex flex-col transition-all duration-300 w-full"
+              >
+                {/* Image Layer - Standing tall at h-56 to protect the vertical aspect ratio */}
+                <img
+                  src={p.img}
+                  alt={p.name}
+                  className="w-full h-56 object-cover block border-b border-amber-950/10"
+                />
 
-            {/* Context Details Layer */}
-            <div className="p-5 flex flex-col flex-1 justify-between gap-4">
-              <div className="space-y-1.5">
-                <h3 className="text-amber-50 text-lg font-bold tracking-tight leading-tight">
-                  {p.name}
-                </h3>
-                <p className="text-xs text-gray-400 font-normal leading-relaxed line-clamp-2">
-                  {p.desc}
-                </p>
-              </div>
+                {/* Context Details Layer */}
+                <div className="p-5 flex flex-col flex-1 justify-between gap-4">
+                  <div className="space-y-1.5">
+                    <h3 className="text-amber-50 text-lg font-bold tracking-tight leading-tight">
+                      {p.name}
+                    </h3>
+                    <p className="text-xs text-gray-400 font-normal leading-relaxed line-clamp-2">
+                      {p.desc}
+                    </p>
+                  </div>
 
-              {/* Pricing & Call to Action Footer Row */}
-              <div className="flex justify-between items-center pt-2 ">
-                <span className="text-orange-400 font-black text-lg tracking-wide">₹{p.price}</span>
+                  {/* Pricing & Call to Action Footer Row */}
+                  <div className="flex justify-between items-center pt-2 ">
+                    <span className="text-orange-400 font-black text-lg tracking-wide">₹{p.price}</span>
 
-                <button
-                  onClick={() => addtoCart(p)}
-                  className="bg-orange-500 flex justify-between items-center pt-2 gap-1  text-black border-none rounded-xl px-4 py-2 text-xs font-bold tracking-wide cursor-pointer hover:bg-orange-600 hover:scale-105 active:scale-95 transition-all shadow-md shadow-orange-500/10"
-                >
-                  + Add <FaCartPlus size={15} />
-                </button>
-              </div>
+                    <button
+                      onClick={() => addtoCart(p)}
+                      className="bg-orange-500 flex justify-between items-center pt-2 gap-1  text-black border-none rounded-xl px-4 py-2 text-xs font-bold tracking-wide cursor-pointer hover:bg-orange-600 hover:scale-105 active:scale-95 transition-all shadow-md shadow-orange-500/10"
+                    >
+                      + Add <FaCartPlus size={15} />
+                    </button>
+                  </div>
 
-            </div>
-          </motion.div>
-        ))}
+                </div>
+              </motion.div>
+            ))}</>
+        }
       </motion.div>
     </div>
   )
