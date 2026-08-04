@@ -1,14 +1,14 @@
-import express from 'express'; // 💡 Cleaned up the import
+import express from 'express';
 import DataBase from './DB.js';
 import cors from 'cors';
 import router from '../routers/index.js';
 
 const app = express();
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 
-// 1. Enable CORS first
+// Allow requests from your Next.js frontend origin
 app.use(cors({
-    origin: "https://pizzapalace-q71o.onrender.com",
+    origin: ["http://localhost:3000", "http://localhost:5173" , "https://pizza-palace-ere9.onrender.com"],
     credentials: true
 }));
 
@@ -19,9 +19,9 @@ DataBase();
 app.use('/api', router);
 
 app.get('/', (req, res) => {
-    res.send("Server is running 🖥️")
+    res.send("Server is running 🖥️");
 });
 
 app.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`)
+    console.log(`Server started on port ${PORT}`);
 });

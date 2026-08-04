@@ -1,4 +1,5 @@
-import dotenv from 'dotenv'
+import express from 'express'; // Fixed typo (expres -> express)
+import dotenv from 'dotenv';
 dotenv.config();
 import mongoose from "mongoose";
 
