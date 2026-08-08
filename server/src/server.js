@@ -6,24 +6,15 @@ import router from '../routers/index.js';
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+// Enable CORS for all incoming request origins dynamically
 app.use(cors({
-    origin: function (origin, callback) {
-        // Allow requests with no origin (like Postman or server-to-server calls)
-        if (!origin) return callback(null, true);
-        
-        // Match any .vercel.app deployment or localhost
-        if (origin.endsWith('.vercel.app') || origin.includes('localhost')) {
-            return callback(null, true);
-        }
-        
-        // Reject cleanly without throwing a 500 error
-        return callback(null, false);
-    },
+    origin: true,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+// Express json parser
 app.use(express.json());
 
 DataBase();
